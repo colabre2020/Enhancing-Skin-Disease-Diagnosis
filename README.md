@@ -593,7 +593,7 @@ For questions, issues, or contributions:
 
 - **Issues**: Create a GitHub issue for bug reports
 - **Discussions**: Use GitHub discussions for questions
-- **Email**: [contact@email.com] for direct inquiries
+- **Email**: [spand14t@unh.newhaven.edu] for direct inquiries
 
 ## Acknowledgments
 
@@ -605,4 +605,5 @@ For questions, issues, or contributions:
 ---
 
 **Built with ❤️ for advancing healthcare through AI**
+# Enhancing-Skin-Disease-Diagnosis
 # Enhancing-Skin-Disease-Diagnosis
