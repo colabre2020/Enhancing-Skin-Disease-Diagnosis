@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Management - Dermatology AI Platform</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="/static/material.css" rel="stylesheet">
+    
+    <style>
+        .cases-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--md-spacing-lg);
+        }
+        
+        .cases-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--md-spacing-xl);
+        }
+        
+        .cases-grid {
+            display: grid;
+            gap: var(--md-spacing-lg);
+        }
+        
+        .case-card {
+            border: 1px solid var(--md-outline);
+            border-radius: var(--md-radius-lg);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .case-card:hover {
+            border-color: var(--md-primary-600);
+            box-shadow: var(--md-elevation-2);
+        }
+        
+        .case-header {
+            background: var(--md-surface-variant);
+            padding: var(--md-spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .case-id {
+            font-family: var(--md-font-mono);
+            font-weight: 600;
+            color: var(--md-primary-600);
+        }
+        
+        .case-status {
+            padding: 4px 12px;
+            border-radius: var(--md-radius-full);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-completed {
+            background: var(--md-success-100);
+            color: var(--md-success-700);
+        }
+        
+        .status-pending {
+            background: var(--md-warning-100);
+            color: var(--md-warning-700);
+        }
+        
+        .case-content {
+            padding: var(--md-spacing-lg);
+        }
+        
+        .case-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--md-spacing-md);
+            margin-bottom: var(--md-spacing-md);
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--md-on-surface-variant);
+            margin-bottom: 2px;
+        }
+        
+        .detail-value {
+            font-weight: 500;
+        }
+        
+        .case-predictions {
+            margin-bottom: var(--md-spacing-md);
+        }
+        
+        .prediction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--md-spacing-xs) 0;
+            border-bottom: 1px solid var(--md-outline-variant);
+        }
+        
+        .prediction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .confidence-score {
+            background: var(--md-primary-100);
+            color: var(--md-primary-700);
+            padding: 2px 8px;
+            border-radius: var(--md-radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .case-actions {
+            display: flex;
+            gap: var(--md-spacing-sm);
+            justify-content: flex-end;
+            padding-top: var(--md-spacing-md);
+            border-top: 1px solid var(--md-outline-variant);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: var(--md-spacing-xxl);
+            color: var(--md-on-surface-variant);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: var(--md-spacing-lg);
+            opacity: 0.5;
+        }
+        
+        .loading-state {
+            text-align: center;
+            padding: var(--md-spacing-xxl);
+        }
+        
+        .case-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        
+        .modal-content {
+            background: var(--md-surface);
+            border-radius: var(--md-radius-lg);
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: var(--md-spacing-lg);
+        }
+        
+        .modal-header {
+            padding: var(--md-spacing-lg);
+            border-bottom: 1px solid var(--md-outline-variant);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: var(--md-spacing-lg);
+        }
+        
+        .filter-section {
+            display: flex;
+            gap: var(--md-spacing-md);
+            margin-bottom: var(--md-spacing-lg);
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="cases-container">
+        <div class="cases-header">
+            <div>
+                <h1>Case Management</h1>
+                <p style="color: var(--md-on-surface-variant); margin-top: var(--md-spacing-xs);">
+                    View and manage your diagnostic cases
+                </p>
+            </div>
+            <div style="display: flex; gap: var(--md-spacing-sm);">
+                <button class="md-button md-button-outlined" onclick="refreshCases()">
+                    <span class="material-icons">refresh</span>
+                    Refresh
+                </button>
+                <button class="md-button md-button-filled" onclick="window.location.href='/analyze'">
+                    <span class="material-icons">add</span>
+                    New Analysis
+                </button>
+            </div>
+        </div>
+        
+        <div class="filter-section">
+            <div class="md-input-group">
+                <select id="statusFilter" class="md-input" onchange="filterCases()">
+                    <option value="">All Status</option>
+                    <option value="completed">Completed</option>
+                    <option value="pending">Pending</option>
+                </select>
+                <label class="md-input-label">Filter by Status</label>
+            </div>
+            
+            <div class="md-input-group">
+                <input type="text" id="searchInput" class="md-input" placeholder="Search cases..." oninput="filterCases()">
+                <label class="md-input-label">Search</label>
+            </div>
+        </div>
+        
+        <div id="loadingState" class="loading-state">
+            <div class="md-spinner"></div>
+            <p>Loading cases...</p>
+        </div>
+        
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="material-icons empty-icon">folder_open</div>
+            <h3>No Cases Found</h3>
+            <p>You haven't created any diagnostic cases yet.</p>
+            <button class="md-button md-button-filled" onclick="window.location.href='/analyze'" style="margin-top: var(--md-spacing-lg);">
+                <span class="material-icons">add</span>
+                Create First Case
+            </button>
+        </div>
+        
+        <div id="casesGrid" class="cases-grid" style="display: none;">
+            <!-- Cases will be populated here -->
+        </div>
+    </div>
+    
+    <!-- Case Detail Modal -->
+    <div id="caseModal" class="case-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Case Details</h2>
+                <button class="md-button md-button-text" onclick="closeCaseModal()">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Case details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Material Design JavaScript -->
+    <script src="/static/material.js"></script>
+    
+    <script>
+        let allCases = [];
+        let filteredCases = [];
+        
+        // Load cases on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCases();
+        });
+        
+        async function loadCases() {
+            try {
+                const token = localStorage.getItem('access_token');
+                if (!token) {
+                    window.location.href = '/login';
+                    return;
+                }
+                
+                const response = await fetch('/api/cases', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    allCases = data.cases;
+                    filteredCases = [...allCases];
+                    displayCases();
+                } else {
+                    throw new Error('Failed to load cases');
+                }
+            } catch (error) {
+                console.error('Error loading cases:', error);
+                showSnackbar('Failed to load cases', 'error');
+            }
+        }
+        
+        function displayCases() {
+            const loadingState = document.getElementById('loadingState');
+            const emptyState = document.getElementById('emptyState');
+            const casesGrid = document.getElementById('casesGrid');
+            
+            loadingState.style.display = 'none';
+            
+            if (filteredCases.length === 0) {
+                emptyState.style.display = 'block';
+                casesGrid.style.display = 'none';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            casesGrid.style.display = 'grid';
+            
+            casesGrid.innerHTML = filteredCases.map(case_ => createCaseCard(case_)).join('');
+        }
+        
+        function createCaseCard(case_) {
+            const date = new Date(case_.created_at).toLocaleDateString();
+            const topPrediction = case_.predictions[0];
+            
+            return `
+                <div class="case-card" onclick="openCaseModal('${case_.id}')">
+                    <div class="case-header">
+                        <span class="case-id">${case_.id}</span>
+                        <span class="case-status status-${case_.status}">${case_.status.charAt(0).toUpperCase() + case_.status.slice(1)}</span>
+                    </div>
+                    <div class="case-content">
+                        <div class="case-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Date</span>
+                                <span class="detail-value">${date}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Patient Age</span>
+                                <span class="detail-value">${case_.patient_age} years</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Gender</span>
+                                <span class="detail-value">${case_.patient_gender}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Location</span>
+                                <span class="detail-value">${case_.lesion_location || 'Not specified'}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="case-predictions">
+                            <div class="detail-label" style="margin-bottom: var(--md-spacing-xs);">Top Prediction</div>
+                            <div class="prediction-item">
+                                <span>${topPrediction.condition}</span>
+                                <span class="confidence-score">${(topPrediction.confidence * 100).toFixed(1)}%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="case-actions">
+                            <button class="md-button md-button-text" onclick="event.stopPropagation(); viewCaseDetails('${case_.id}')">
+                                <span class="material-icons">visibility</span>
+                                View
+                            </button>
+                            <button class="md-button md-button-text" onclick="event.stopPropagation(); deleteCase('${case_.id}')">
+                                <span class="material-icons">delete</span>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function filterCases() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            
+            filteredCases = allCases.filter(case_ => {
+                const matchesStatus = !statusFilter || case_.status === statusFilter;
+                const matchesSearch = !searchInput || 
+                    case_.id.toLowerCase().includes(searchInput) ||
+                    case_.predictions.some(p => p.condition.toLowerCase().includes(searchInput)) ||
+                    case_.lesion_location.toLowerCase().includes(searchInput);
+                
+                return matchesStatus && matchesSearch;
+            });
+            
+            displayCases();
+        }
+        
+        async function openCaseModal(caseId) {
+            try {
+                const token = localStorage.getItem('access_token');
+                const response = await fetch(`/api/cases/${caseId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showCaseDetails(data.case);
+                } else {
+                    throw new Error('Failed to load case details');
+                }
+            } catch (error) {
+                console.error('Error loading case details:', error);
+                showSnackbar('Failed to load case details', 'error');
+            }
+        }
+        
+        function showCaseDetails(case_) {
+            const modal = document.getElementById('caseModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = `Case ${case_.id}`;
+            
+            const date = new Date(case_.created_at).toLocaleDateString();
+            
+            modalBody.innerHTML = `
+                <div style="display: grid; gap: var(--md-spacing-lg);">
+                    <div>
+                        <h3>Patient Information</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--md-spacing-md); margin-top: var(--md-spacing-sm);">
+                            <div><strong>Age:</strong> ${case_.patient_age} years</div>
+                            <div><strong>Gender:</strong> ${case_.patient_gender}</div>
+                            <div><strong>Skin Type:</strong> ${case_.skin_type}</div>
+                            <div><strong>Location:</strong> ${case_.lesion_location}</div>
+                        </div>
+                        ${case_.clinical_history ? `<div style="margin-top: var(--md-spacing-sm);"><strong>Clinical History:</strong><br>${case_.clinical_history}</div>` : ''}
+                        ${case_.symptoms ? `<div style="margin-top: var(--md-spacing-sm);"><strong>Symptoms:</strong><br>${case_.symptoms}</div>` : ''}
+                    </div>
+                    
+                    <div>
+                        <h3>AI Predictions</h3>
+                        <div style="margin-top: var(--md-spacing-sm);">
+                            ${case_.predictions.map(pred => `
+                                <div class="prediction-item" style="padding: var(--md-spacing-sm) 0; border-bottom: 1px solid var(--md-outline-variant);">
+                                    <span>${pred.condition}</span>
+                                    <span class="confidence-score">${(pred.confidence * 100).toFixed(1)}%</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3>Visual Concepts</h3>
+                        <div style="margin-top: var(--md-spacing-sm);">
+                            ${case_.visual_concepts.map(concept => `
+                                <div style="margin-bottom: var(--md-spacing-sm);">
+                                    <strong>${concept.name}:</strong> ${concept.description}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3>AI Explanation</h3>
+                        <div style="background: var(--md-surface-variant); padding: var(--md-spacing-md); border-radius: var(--md-radius-md); margin-top: var(--md-spacing-sm); white-space: pre-line;">
+                            ${case_.explanation}
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: var(--md-spacing-sm); justify-content: flex-end;">
+                        <button class="md-button md-button-outlined" onclick="exportCase('${case_.id}')">
+                            <span class="material-icons">download</span>
+                            Export Report
+                        </button>
+                        <button class="md-button md-button-filled-tonal" onclick="closeCaseModal()">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function closeCaseModal() {
+            document.getElementById('caseModal').style.display = 'none';
+        }
+        
+        async function deleteCase(caseId) {
+            if (!confirm('Are you sure you want to delete this case? This action cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                const token = localStorage.getItem('access_token');
+                const response = await fetch(`/api/cases/${caseId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    showSnackbar('Case deleted successfully', 'success');
+                    refreshCases();
+                } else {
+                    throw new Error('Failed to delete case');
+                }
+            } catch (error) {
+                console.error('Error deleting case:', error);
+                showSnackbar('Failed to delete case', 'error');
+            }
+        }
+        
+        function exportCase(caseId) {
+            const case_ = allCases.find(c => c.id === caseId);
+            if (!case_) return;
+            
+            const report = `DERMATOLOGY AI DIAGNOSTIC REPORT
+            
+Case ID: ${case_.id}
+Date: ${new Date(case_.created_at).toLocaleDateString()}
+
+PATIENT INFORMATION:
+- Age: ${case_.patient_age} years
+- Gender: ${case_.patient_gender}
+- Skin Type: ${case_.skin_type}
+- Lesion Location: ${case_.lesion_location}
+- Clinical History: ${case_.clinical_history || 'None provided'}
+- Symptoms: ${case_.symptoms || 'None reported'}
+
+AI PREDICTIONS:
+${case_.predictions.map(pred => `- ${pred.condition}: ${(pred.confidence * 100).toFixed(1)}% confidence`).join('\n')}
+
+VISUAL CONCEPTS:
+${case_.visual_concepts.map(concept => `- ${concept.name}: ${concept.description}`).join('\n')}
+
+AI EXPLANATION:
+${case_.explanation}
+
+---
+This report was generated by the Dermatology AI Platform.
+For medical decisions, always consult with qualified healthcare professionals.`;
+            
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `case-${case_.id}-report.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function refreshCases() {
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('casesGrid').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+            loadCases();
+        }
+        
+        function viewCaseDetails(caseId) {
+            openCaseModal(caseId);
+        }
+        
+        function showSnackbar(message, type = 'info') {
+            const snackbar = document.createElement('div');
+            snackbar.className = `md-snackbar ${type}`;
+            snackbar.textContent = message;
+            
+            snackbar.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'error' ? 'var(--md-error-600)' : type === 'success' ? 'var(--md-success-600)' : 'var(--md-primary-600)'};
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: slideUp 0.3s ease;
+            `;
+            
+            document.body.appendChild(snackbar);
+            
+            setTimeout(() => {
+                snackbar.style.animation = 'slideDown 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(snackbar);
+                }, 300);
+            }, 4000);
+        }
+        
+        // Check authentication
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            window.location.href = '/login';
+        }
+        
+        // Modal click outside to close
+        document.getElementById('caseModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCaseModal();
+            }
+        });
+    </script>
+</body>
+</html>

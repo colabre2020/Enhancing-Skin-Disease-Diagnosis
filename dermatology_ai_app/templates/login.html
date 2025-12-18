@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Enterprise Dermatology AI Platform</title>
+    
+    <!-- Material Design CSS -->
+    <link rel="stylesheet" href="/static/material.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--md-primary-50) 0%, var(--md-primary-100) 100%);
+            padding: var(--md-spacing-lg);
+        }
+        
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: var(--md-spacing-xl);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: var(--md-spacing-xl);
+        }
+        
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--md-primary-600);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--md-spacing-lg) auto;
+            box-shadow: var(--md-shadow-2);
+        }
+        
+        .login-logo .material-icons {
+            font-size: 2.5rem;
+            color: white;
+        }
+        
+        .login-title {
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin: 0 0 var(--md-spacing-sm) 0;
+            color: var(--md-on-surface);
+        }
+        
+        .login-subtitle {
+            color: var(--md-on-surface-variant);
+            margin: 0;
+        }
+        
+        .login-form {
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .form-field {
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .checkbox-field {
+            display: flex;
+            align-items: center;
+            margin: var(--md-spacing-lg) 0;
+        }
+        
+        .checkbox-field input[type="checkbox"] {
+            margin-right: var(--md-spacing-sm);
+        }
+        
+        .login-actions {
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .login-button {
+            width: 100%;
+            margin-bottom: var(--md-spacing-md);
+        }
+        
+        .forgot-password {
+            text-align: center;
+        }
+        
+        .forgot-password a {
+            color: var(--md-primary-600);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        
+        .login-footer {
+            text-align: center;
+            padding-top: var(--md-spacing-lg);
+            border-top: 1px solid var(--md-outline-variant);
+        }
+        
+        .demo-credentials {
+            background: var(--md-secondary-50);
+            border: 1px solid var(--md-secondary-200);
+            border-radius: var(--md-radius-md);
+            padding: var(--md-spacing-md);
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .demo-credentials h4 {
+            margin: 0 0 var(--md-spacing-sm) 0;
+            color: var(--md-secondary-800);
+            font-size: 0.9rem;
+        }
+        
+        .demo-credentials p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: var(--md-secondary-700);
+        }
+        
+        .error-message {
+            background: var(--md-error-50);
+            border: 1px solid var(--md-error-200);
+            color: var(--md-error-800);
+            padding: var(--md-spacing-md);
+            border-radius: var(--md-radius-md);
+            margin-bottom: var(--md-spacing-lg);
+            display: none;
+        }
+        
+        .success-message {
+            background: var(--md-success-50);
+            border: 1px solid var(--md-success-200);
+            color: var(--md-success-800);
+            padding: var(--md-spacing-md);
+            border-radius: var(--md-radius-md);
+            margin-bottom: var(--md-spacing-lg);
+            display: none;
+        }
+        
+        .feature-highlights {
+            margin-top: var(--md-spacing-xl);
+            text-align: center;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--md-spacing-lg);
+            margin-top: var(--md-spacing-lg);
+        }
+        
+        .feature-item {
+            text-align: center;
+        }
+        
+        .feature-icon {
+            color: var(--md-primary-600);
+            font-size: 2rem;
+            margin-bottom: var(--md-spacing-xs);
+        }
+        
+        .feature-text {
+            font-size: 0.9rem;
+            color: var(--md-on-surface-variant);
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                padding: var(--md-spacing-md);
+            }
+            
+            .login-card {
+                padding: var(--md-spacing-lg);
+            }
+            
+            .feature-list {
+                grid-template-columns: 1fr;
+                gap: var(--md-spacing-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="md-card login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <span class="material-icons">medical_services</span>
+                </div>
+                <h1 class="login-title">Welcome Back</h1>
+                <p class="login-subtitle">Sign in to your enterprise account</p>
+            </div>
+            
+            <!-- Demo Credentials -->
+            <div class="demo-credentials">
+                <h4><span class="material-icons" style="font-size: 1rem; vertical-align: middle; margin-right: 4px;">info</span>Demo Credentials</h4>
+                <p><strong>Admin:</strong> admin@dermatologyai.com / admin123</p>
+                <p><strong>Doctor:</strong> doctor@clinic.com / doctor123</p>
+            </div>
+            
+            <!-- Error/Success Messages -->
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="login-form">
+                <div class="form-field">
+                    <div class="md-text-field">
+                        <input type="email" id="email" name="email" class="md-text-field__input" required autocomplete="email">
+                        <label for="email" class="md-text-field__label">Email Address</label>
+                    </div>
+                </div>
+                
+                <div class="form-field">
+                    <div class="md-text-field">
+                        <input type="password" id="password" name="password" class="md-text-field__input" required autocomplete="current-password">
+                        <label for="password" class="md-text-field__label">Password</label>
+                    </div>
+                </div>
+                
+                <div class="checkbox-field">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    <label for="rememberMe">Remember me for 8 hours</label>
+                </div>
+                
+                <div class="login-actions">
+                    <button type="submit" class="md-button md-button--filled login-button md-ripple">
+                        <span class="material-icons">login</span>
+                        Sign In
+                    </button>
+                    
+                    <div class="forgot-password">
+                        <a href="#" onclick="showForgotPassword()">Forgot your password?</a>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Feature Highlights -->
+            <div class="feature-highlights">
+                <h3>Enterprise Features</h3>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="material-icons feature-icon">security</div>
+                        <div class="feature-text">HIPAA Compliant</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="material-icons feature-icon">psychology</div>
+                        <div class="feature-text">AI Powered</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="material-icons feature-icon">analytics</div>
+                        <div class="feature-text">Advanced Analytics</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="material-icons feature-icon">group</div>
+                        <div class="feature-text">Team Collaboration</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="login-footer">
+                <p style="font-size: 0.8rem; color: var(--md-on-surface-variant);">
+                    © 2024 Enterprise Dermatology AI Platform. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Material Design JavaScript -->
+    <script src="/static/material.js"></script>
+    
+    <script>
+        // Auto-fill demo credentials
+        function fillDemoCredentials(type) {
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            
+            if (type === 'admin') {
+                emailInput.value = 'admin@dermatologyai.com';
+                passwordInput.value = 'admin123';
+            } else if (type === 'doctor') {
+                emailInput.value = 'doctor@clinic.com';
+                passwordInput.value = 'doctor123';
+            }
+            
+            // Trigger label animations
+            emailInput.dispatchEvent(new Event('input'));
+            passwordInput.dispatchEvent(new Event('input'));
+        }
+        
+        // Add click handlers to demo credentials
+        document.addEventListener('DOMContentLoaded', function() {
+            const demoCredentials = document.querySelector('.demo-credentials');
+            demoCredentials.addEventListener('click', function(e) {
+                const text = e.target.textContent;
+                if (text.includes('admin@dermatologyai.com')) {
+                    fillDemoCredentials('admin');
+                } else if (text.includes('doctor@clinic.com')) {
+                    fillDemoCredentials('doctor');
+                }
+            });
+        });
+        
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const loginData = {
+                email: formData.get('email'),
+                password: formData.get('password'),
+                remember_me: formData.get('rememberMe') === 'on'
+            };
+            
+            // Show loading
+            MaterialDesign.showLoading('Signing you in...');
+            
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData)
+                });
+                
+                const result = await response.json();
+                
+                MaterialDesign.hideLoading();
+                
+                if (response.ok) {
+                    // Store token and redirect
+                    localStorage.setItem('access_token', result.access_token);
+                    localStorage.setItem('user_data', JSON.stringify(result.user));
+                    
+                    showSuccessMessage('Login successful! Redirecting...');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1000);
+                } else {
+                    showErrorMessage(result.detail || 'Login failed. Please try again.');
+                }
+            } catch (error) {
+                MaterialDesign.hideLoading();
+                showErrorMessage('Network error. Please check your connection and try again.');
+            }
+        });
+        
+        function showErrorMessage(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        function showSuccessMessage(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+        
+        function showForgotPassword() {
+            showSnackbar('Password reset functionality will be available in the full version.', null, 4000);
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Alt + D for demo doctor credentials
+            if (e.altKey && e.key === 'd') {
+                e.preventDefault();
+                fillDemoCredentials('doctor');
+            }
+            // Alt + A for demo admin credentials
+            if (e.altKey && e.key === 'a') {
+                e.preventDefault();
+                fillDemoCredentials('admin');
+            }
+        });
+        
+        // Auto-focus on email field
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('email').focus();
+        });
+    </script>
+</body>
+</html>

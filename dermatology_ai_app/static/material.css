@@ -1,0 +1,713 @@
+/* Material Design CSS Framework for Dermatology AI App */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+/* Material Design CSS Variables */
+:root {
+  /* Primary Colors - Material Blue */
+  --md-primary-50: #e3f2fd;
+  --md-primary-100: #bbdefb;
+  --md-primary-200: #90caf9;
+  --md-primary-300: #64b5f6;
+  --md-primary-400: #42a5f5;
+  --md-primary-500: #2196f3;
+  --md-primary-600: #1e88e5;
+  --md-primary-700: #1976d2;
+  --md-primary-800: #1565c0;
+  --md-primary-900: #0d47a1;
+
+  /* Accent Colors - Material Teal */
+  --md-accent-50: #e0f2f1;
+  --md-accent-100: #b2dfdb;
+  --md-accent-200: #80cbc4;
+  --md-accent-300: #4db6ac;
+  --md-accent-400: #26a69a;
+  --md-accent-500: #009688;
+  --md-accent-600: #00897b;
+  --md-accent-700: #00796b;
+  --md-accent-800: #00695c;
+  --md-accent-900: #004d40;
+
+  /* Error Colors */
+  --md-error-50: #ffebee;
+  --md-error-100: #ffcdd2;
+  --md-error-500: #f44336;
+  --md-error-700: #d32f2f;
+
+  /* Warning Colors */
+  --md-warning-50: #fff3e0;
+  --md-warning-100: #ffe0b2;
+  --md-warning-500: #ff9800;
+  --md-warning-700: #f57c00;
+
+  /* Success Colors */
+  --md-success-50: #e8f5e8;
+  --md-success-100: #c8e6c9;
+  --md-success-500: #4caf50;
+  --md-success-700: #388e3c;
+
+  /* Surface Colors */
+  --md-surface: #ffffff;
+  --md-surface-variant: #f5f5f5;
+  --md-surface-dim: #fafafa;
+  --md-surface-bright: #ffffff;
+
+  /* Text Colors */
+  --md-on-surface: rgba(0, 0, 0, 0.87);
+  --md-on-surface-variant: rgba(0, 0, 0, 0.60);
+  --md-on-surface-disabled: rgba(0, 0, 0, 0.38);
+  --md-on-primary: #ffffff;
+  --md-on-accent: #ffffff;
+
+  /* Shadows - Material Design Elevation */
+  --md-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --md-shadow-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  --md-shadow-3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  --md-shadow-4: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  --md-shadow-5: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+
+  /* Spacing - 8dp grid system */
+  --md-spacing-xs: 4px;
+  --md-spacing-sm: 8px;
+  --md-spacing-md: 16px;
+  --md-spacing-lg: 24px;
+  --md-spacing-xl: 32px;
+  --md-spacing-xxl: 48px;
+
+  /* Border Radius */
+  --md-radius-sm: 4px;
+  --md-radius-md: 8px;
+  --md-radius-lg: 16px;
+  --md-radius-xl: 24px;
+
+  /* Transitions */
+  --md-transition-fast: 0.15s ease-out;
+  --md-transition-normal: 0.25s ease-out;
+  --md-transition-slow: 0.35s ease-out;
+}
+
+/* Base Reset */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--md-on-surface);
+  background-color: var(--md-surface-variant);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Material Design Typography Scale */
+.md-display-large {
+  font-size: 57px;
+  font-weight: 400;
+  line-height: 64px;
+  letter-spacing: -0.25px;
+}
+
+.md-display-medium {
+  font-size: 45px;
+  font-weight: 400;
+  line-height: 52px;
+  letter-spacing: 0px;
+}
+
+.md-display-small {
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 44px;
+  letter-spacing: 0px;
+}
+
+.md-headline-large {
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 40px;
+  letter-spacing: 0px;
+}
+
+.md-headline-medium {
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 36px;
+  letter-spacing: 0px;
+}
+
+.md-headline-small {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0px;
+}
+
+.md-title-large {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: 0px;
+}
+
+.md-title-medium {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+}
+
+.md-title-small {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+}
+
+.md-label-large {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+}
+
+.md-label-medium {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+.md-label-small {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+.md-body-large {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+.md-body-medium {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.25px;
+}
+
+.md-body-small {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.4px;
+}
+
+/* Material Design Cards */
+.md-card {
+  background-color: var(--md-surface);
+  border-radius: var(--md-radius-lg);
+  box-shadow: var(--md-shadow-1);
+  padding: var(--md-spacing-lg);
+  margin: var(--md-spacing-md);
+  transition: box-shadow var(--md-transition-normal), transform var(--md-transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.md-card:hover {
+  box-shadow: var(--md-shadow-2);
+  transform: translateY(-2px);
+}
+
+.md-card--elevated {
+  box-shadow: var(--md-shadow-2);
+}
+
+.md-card--elevated:hover {
+  box-shadow: var(--md-shadow-3);
+}
+
+.md-card--outlined {
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.md-card__header {
+  display: flex;
+  align-items: center;
+  padding-bottom: var(--md-spacing-md);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: var(--md-spacing-md);
+}
+
+.md-card__title {
+  flex: 1;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--md-on-surface);
+}
+
+.md-card__subtitle {
+  margin: var(--md-spacing-xs) 0 0 0;
+  color: var(--md-on-surface-variant);
+  font-size: 14px;
+}
+
+.md-card__content {
+  margin: var(--md-spacing-md) 0;
+}
+
+.md-card__actions {
+  display: flex;
+  gap: var(--md-spacing-sm);
+  padding-top: var(--md-spacing-md);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin-top: var(--md-spacing-md);
+}
+
+/* Material Design Buttons */
+.md-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  border-radius: var(--md-radius-xl);
+  border: none;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--md-transition-normal);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  min-height: 40px;
+  line-height: 1;
+  letter-spacing: 0.1px;
+}
+
+.md-button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.md-button__icon {
+  margin-right: var(--md-spacing-sm);
+  font-size: 18px;
+}
+
+.md-button__icon--trailing {
+  margin-right: 0;
+  margin-left: var(--md-spacing-sm);
+}
+
+/* Filled Button (Primary) */
+.md-button--filled {
+  background-color: var(--md-primary-600);
+  color: var(--md-on-primary);
+  box-shadow: var(--md-shadow-1);
+}
+
+.md-button--filled:hover {
+  background-color: var(--md-primary-700);
+  box-shadow: var(--md-shadow-2);
+  transform: translateY(-1px);
+}
+
+.md-button--filled:active {
+  background-color: var(--md-primary-800);
+  transform: translateY(0);
+}
+
+/* Outlined Button */
+.md-button--outlined {
+  background-color: transparent;
+  color: var(--md-primary-600);
+  border: 1px solid var(--md-primary-600);
+}
+
+.md-button--outlined:hover {
+  background-color: var(--md-primary-50);
+  border-color: var(--md-primary-700);
+  color: var(--md-primary-700);
+}
+
+/* Text Button */
+.md-button--text {
+  background-color: transparent;
+  color: var(--md-primary-600);
+  padding: 10px 12px;
+}
+
+.md-button--text:hover {
+  background-color: var(--md-primary-50);
+  color: var(--md-primary-700);
+}
+
+/* Floating Action Button */
+.md-fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--md-primary-600);
+  color: var(--md-on-primary);
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--md-shadow-2);
+  transition: all var(--md-transition-normal);
+  position: fixed;
+  bottom: var(--md-spacing-lg);
+  right: var(--md-spacing-lg);
+  z-index: 1000;
+}
+
+.md-fab:hover {
+  background-color: var(--md-primary-700);
+  box-shadow: var(--md-shadow-3);
+  transform: scale(1.1);
+}
+
+.md-fab--extended {
+  width: auto;
+  height: 48px;
+  border-radius: var(--md-radius-xl);
+  padding: 0 var(--md-spacing-md);
+}
+
+/* Ripple Effect */
+.md-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.md-ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width var(--md-transition-fast), height var(--md-transition-fast);
+}
+
+.md-ripple:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Material Design Form Fields */
+.md-text-field {
+  position: relative;
+  margin: var(--md-spacing-md) 0;
+}
+
+.md-text-field__input {
+  width: 100%;
+  padding: 16px 12px 8px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.38);
+  border-radius: var(--md-radius-sm);
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  background-color: transparent;
+  transition: border-color var(--md-transition-normal);
+}
+
+.md-text-field__input:focus {
+  outline: none;
+  border-color: var(--md-primary-600);
+  border-width: 2px;
+}
+
+.md-text-field__label {
+  position: absolute;
+  left: 12px;
+  top: 16px;
+  font-size: 16px;
+  color: var(--md-on-surface-variant);
+  transition: all var(--md-transition-normal);
+  pointer-events: none;
+  background-color: var(--md-surface);
+  padding: 0 4px;
+}
+
+.md-text-field__input:focus + .md-text-field__label,
+.md-text-field__input:not(:placeholder-shown) + .md-text-field__label {
+  top: -8px;
+  font-size: 12px;
+  color: var(--md-primary-600);
+}
+
+.md-text-field--filled {
+  background-color: var(--md-surface-variant);
+  border-radius: var(--md-radius-sm) var(--md-radius-sm) 0 0;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.38);
+}
+
+.md-text-field--filled .md-text-field__input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.38);
+  border-radius: 0;
+}
+
+.md-text-field--filled .md-text-field__input:focus {
+  border-bottom: 2px solid var(--md-primary-600);
+}
+
+/* Material Design Chips */
+.md-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  margin: 2px;
+  background-color: var(--md-surface-variant);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: var(--md-radius-md);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--md-on-surface);
+  cursor: pointer;
+  transition: all var(--md-transition-normal);
+  user-select: none;
+}
+
+.md-chip:hover {
+  background-color: var(--md-primary-50);
+  border-color: var(--md-primary-200);
+}
+
+.md-chip--selected {
+  background-color: var(--md-primary-100);
+  border-color: var(--md-primary-600);
+  color: var(--md-primary-700);
+}
+
+.md-chip__icon {
+  margin-right: var(--md-spacing-xs);
+  font-size: 16px;
+}
+
+/* Material Design Progress Indicators */
+.md-progress-linear {
+  height: 4px;
+  background-color: var(--md-primary-100);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.md-progress-linear__bar {
+  height: 100%;
+  background-color: var(--md-primary-600);
+  transition: width var(--md-transition-normal);
+}
+
+.md-progress-linear--indeterminate .md-progress-linear__bar {
+  width: 30%;
+  animation: md-progress-indeterminate 2s infinite;
+}
+
+@keyframes md-progress-indeterminate {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
+.md-progress-circular {
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
+
+.md-progress-circular__svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.md-progress-circular__circle {
+  fill: none;
+  stroke: var(--md-primary-600);
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--md-transition-normal);
+}
+
+/* Material Design Snackbar */
+.md-snackbar {
+  position: fixed;
+  bottom: var(--md-spacing-lg);
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background-color: #323232;
+  color: white;
+  padding: 14px 24px;
+  border-radius: var(--md-radius-sm);
+  box-shadow: var(--md-shadow-2);
+  z-index: 9999;
+  transition: transform var(--md-transition-normal);
+  max-width: 568px;
+  min-width: 344px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.md-snackbar--show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.md-snackbar__message {
+  flex: 1;
+  margin-right: var(--md-spacing-md);
+}
+
+.md-snackbar__action {
+  background: none;
+  border: none;
+  color: var(--md-accent-200);
+  font-weight: 500;
+  cursor: pointer;
+  padding: var(--md-spacing-sm);
+  border-radius: var(--md-radius-sm);
+}
+
+/* Responsive Grid System */
+.md-grid {
+  display: grid;
+  gap: var(--md-spacing-md);
+  padding: var(--md-spacing-md);
+}
+
+.md-grid--cols-1 { grid-template-columns: 1fr; }
+.md-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
+.md-grid--cols-3 { grid-template-columns: repeat(3, 1fr); }
+.md-grid--cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 768px) {
+  .md-grid--cols-2,
+  .md-grid--cols-3,
+  .md-grid--cols-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .md-grid--cols-3,
+  .md-grid--cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Material Design App Bar */
+.md-app-bar {
+  background-color: var(--md-primary-600);
+  color: var(--md-on-primary);
+  box-shadow: var(--md-shadow-2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 var(--md-spacing-md);
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.md-app-bar__title {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.md-app-bar__menu-button {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 24px;
+  cursor: pointer;
+  padding: var(--md-spacing-sm);
+  border-radius: 50%;
+  transition: background-color var(--md-transition-normal);
+}
+
+.md-app-bar__menu-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Utility Classes */
+.md-elevation-0 { box-shadow: none; }
+.md-elevation-1 { box-shadow: var(--md-shadow-1); }
+.md-elevation-2 { box-shadow: var(--md-shadow-2); }
+.md-elevation-3 { box-shadow: var(--md-shadow-3); }
+.md-elevation-4 { box-shadow: var(--md-shadow-4); }
+.md-elevation-5 { box-shadow: var(--md-shadow-5); }
+
+.md-surface { background-color: var(--md-surface); }
+.md-surface-variant { background-color: var(--md-surface-variant); }
+
+.md-text-primary { color: var(--md-primary-600); }
+.md-text-accent { color: var(--md-accent-600); }
+.md-text-error { color: var(--md-error-500); }
+.md-text-success { color: var(--md-success-500); }
+.md-text-warning { color: var(--md-warning-500); }
+
+.md-bg-primary { background-color: var(--md-primary-600); }
+.md-bg-accent { background-color: var(--md-accent-600); }
+.md-bg-error { background-color: var(--md-error-500); }
+.md-bg-success { background-color: var(--md-success-500); }
+.md-bg-warning { background-color: var(--md-warning-500); }
+
+/* Responsive helpers */
+.md-hide-mobile { display: block; }
+.md-show-mobile { display: none; }
+
+@media (max-width: 768px) {
+  .md-hide-mobile { display: none; }
+  .md-show-mobile { display: block; }
+}
+
+/* Animation utilities */
+.md-fade-in {
+  animation: md-fadeIn 0.3s ease-in-out;
+}
+
+.md-slide-up {
+  animation: md-slideUp 0.3s ease-out;
+}
+
+@keyframes md-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes md-slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

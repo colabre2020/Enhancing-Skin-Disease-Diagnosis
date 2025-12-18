@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analysis - Enterprise Dermatology AI Platform</title>
+    
+    <!-- Material Design CSS -->
+    <link rel="stylesheet" href="/static/material.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        .analyze-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--md-spacing-lg);
+        }
+        
+        .analyze-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--md-spacing-xl);
+            margin-top: var(--md-spacing-lg);
+        }
+        
+        .upload-section {
+            padding: var(--md-spacing-xl);
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--md-primary-300);
+            border-radius: var(--md-radius-lg);
+            padding: var(--md-spacing-xl);
+            text-align: center;
+            background: var(--md-primary-50);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--md-primary-600);
+            background: var(--md-primary-100);
+        }
+        
+        .upload-area.dragover {
+            border-color: var(--md-primary-700);
+            background: var(--md-primary-200);
+        }
+        
+        .upload-icon {
+            font-size: 4rem;
+            color: var(--md-primary-600);
+            margin-bottom: var(--md-spacing-md);
+        }
+        
+        .upload-text {
+            font-size: 1.1rem;
+            margin-bottom: var(--md-spacing-sm);
+        }
+        
+        .upload-hint {
+            font-size: 0.9rem;
+            color: var(--md-on-surface-variant);
+        }
+        
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: var(--md-radius-md);
+            margin-top: var(--md-spacing-md);
+        }
+        
+        .form-section {
+            padding: var(--md-spacing-xl);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--md-spacing-lg);
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .form-field {
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .results-section {
+            grid-column: 1 / -1;
+            margin-top: var(--md-spacing-xl);
+            display: none;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--md-spacing-lg);
+        }
+        
+        .predictions-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .prediction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--md-spacing-md);
+            margin-bottom: var(--md-spacing-sm);
+            background: var(--md-surface-variant);
+            border-radius: var(--md-radius-md);
+        }
+        
+        .prediction-name {
+            font-weight: 500;
+        }
+        
+        .confidence-bar {
+            width: 100px;
+            height: 6px;
+            background: var(--md-outline-variant);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-left: var(--md-spacing-md);
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: var(--md-primary-600);
+            transition: width 0.5s ease;
+        }
+        
+        .confidence-text {
+            margin-left: var(--md-spacing-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .concepts-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .concept-item {
+            padding: var(--md-spacing-sm) var(--md-spacing-md);
+            margin-bottom: var(--md-spacing-xs);
+            background: var(--md-surface-variant);
+            border-radius: var(--md-radius-sm);
+            border-left: 4px solid var(--md-secondary-600);
+        }
+        
+        .concept-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .concept-description {
+            font-size: 0.8rem;
+            color: var(--md-on-surface-variant);
+            margin-top: 2px;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .loading-content {
+            background: var(--md-surface);
+            padding: var(--md-spacing-xl);
+            border-radius: var(--md-radius-lg);
+            text-align: center;
+            min-width: 300px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--md-primary-100);
+            border-top: 4px solid var(--md-primary-600);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--md-spacing-md) auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .analyze-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3>Analyzing Image...</h3>
+            <p>Our AI is processing your image and clinical data. This may take a few moments.</p>
+        </div>
+    </div>
+    
+    <div class="analyze-container">
+        <h1>AI Dermatological Analysis</h1>
+        <p>Upload a skin lesion image and provide clinical information for AI-powered diagnosis assistance.</p>
+        
+        <div class="analyze-grid">
+            <!-- Upload Section -->
+            <div class="md-card upload-section">
+                <h2>Upload Image</h2>
+                <div class="upload-area" id="uploadArea">
+                    <span class="material-icons upload-icon">cloud_upload</span>
+                    <div class="upload-text">Click to select or drag & drop an image</div>
+                    <div class="upload-hint">Supported formats: JPG, PNG, GIF (Max 10MB)</div>
+                    <input type="file" class="file-input" id="fileInput" accept="image/*">
+                </div>
+                <img id="imagePreview" class="image-preview" style="display: none;">
+            </div>
+            
+            <!-- Form Section -->
+            <div class="md-card form-section">
+                <h2>Clinical Information</h2>
+                <form id="analysisForm">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <div class="md-text-field">
+                                <input type="number" id="patientAge" name="patient_age" class="md-text-field__input" required min="1" max="120" value="35">
+                                <label for="patientAge" class="md-text-field__label">Patient Age</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-field">
+                            <div class="md-select">
+                                <select id="patientGender" name="patient_gender" class="md-select__input" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <label for="patientGender" class="md-select__label">Gender</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <div class="md-select">
+                                <select id="skinType" name="skin_type" class="md-select__input" required>
+                                    <option value="type_I">Type I (Very fair)</option>
+                                    <option value="type_II">Type II (Fair)</option>
+                                    <option value="type_III" selected>Type III (Medium)</option>
+                                    <option value="type_IV">Type IV (Olive)</option>
+                                    <option value="type_V">Type V (Brown)</option>
+                                    <option value="type_VI">Type VI (Black)</option>
+                                </select>
+                                <label for="skinType" class="md-select__label">Skin Type</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-field">
+                            <div class="md-text-field">
+                                <input type="text" id="lesionLocation" name="lesion_location" class="md-text-field__input" placeholder="e.g., back, arm, face">
+                                <label for="lesionLocation" class="md-text-field__label">Lesion Location</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-field">
+                        <div class="md-text-field">
+                            <textarea id="clinicalHistory" name="clinical_history" class="md-text-field__input" rows="3" placeholder="Previous medical history, family history, medications..."></textarea>
+                            <label for="clinicalHistory" class="md-text-field__label">Clinical History</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-field">
+                        <div class="md-text-field">
+                            <textarea id="symptoms" name="symptoms" class="md-text-field__input" rows="2" placeholder="Itching, pain, bleeding, changes..."></textarea>
+                            <label for="symptoms" class="md-text-field__label">Symptoms</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="md-button md-button--filled md-ripple" style="width: 100%;">
+                        <span class="material-icons">psychology</span>
+                        Analyze with AI
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <div class="results-grid">
+                    <div class="md-card" style="padding: var(--md-spacing-lg);">
+                        <h3>AI Predictions</h3>
+                        <ul class="predictions-list" id="predictionsList">
+                            <!-- Predictions will be populated here -->
+                        </ul>
+                    </div>
+                    
+                    <div class="md-card" style="padding: var(--md-spacing-lg);">
+                        <h3>Visual Concepts</h3>
+                        <ul class="concepts-list" id="visualConceptsList">
+                            <!-- Visual concepts will be populated here -->
+                        </ul>
+                    </div>
+                    
+                    <div class="md-card" style="padding: var(--md-spacing-lg); grid-column: 1 / -1;">
+                        <h3>Clinical Analysis</h3>
+                        <ul class="concepts-list" id="clinicalConceptsList">
+                            <!-- Clinical concepts will be populated here -->
+                        </ul>
+                    </div>
+                    
+                    <div class="md-card" style="padding: var(--md-spacing-lg); grid-column: 1 / -1;">
+                        <h3>AI Explanation</h3>
+                        <div id="explanationText" style="white-space: pre-line; line-height: 1.6;">
+                            <!-- Explanation will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Material Design JavaScript -->
+    <script src="/static/material.js"></script>
+    
+    <script>
+        let selectedFile = null;
+        
+        // File upload handling
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+        
+        function handleFileSelect(file) {
+            if (!file.type.startsWith('image/')) {
+                showSnackbar('Please select a valid image file.', 'error');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                showSnackbar('File size must be less than 10MB.', 'error');
+                return;
+            }
+            
+            selectedFile = file;
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                
+                // Update upload area
+                uploadArea.innerHTML = `
+                    <span class="material-icons upload-icon">check_circle</span>
+                    <div class="upload-text">Image selected: ${file.name}</div>
+                    <div class="upload-hint">Click to change image</div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Form submission
+        document.getElementById('analysisForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!selectedFile) {
+                showSnackbar('Please select an image first.', 'error');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('patient_age', document.getElementById('patientAge').value);
+            formData.append('patient_gender', document.getElementById('patientGender').value);
+            formData.append('skin_type', document.getElementById('skinType').value);
+            formData.append('lesion_location', document.getElementById('lesionLocation').value);
+            formData.append('clinical_history', document.getElementById('clinicalHistory').value);
+            formData.append('symptoms', document.getElementById('symptoms').value);
+            
+            try {
+                const token = localStorage.getItem('access_token');
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    displayResults(result);
+                    showSuccessMessage(result.case_id);
+                } else {
+                    throw new Error(result.detail || 'Analysis failed');
+                }
+            } catch (error) {
+                console.error('Analysis error:', error);
+                showSnackbar(`Analysis failed: ${error.message}`, 'error');
+            } finally {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }
+        });
+        
+        function displayResults(result) {
+            // Show results section
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.style.display = 'block';
+            
+            // Add case ID header if not already present
+            if (!resultsSection.querySelector('.case-id-header')) {
+                const caseHeader = document.createElement('div');
+                caseHeader.className = 'case-id-header';
+                caseHeader.style.cssText = `
+                    background: var(--md-primary-100);
+                    color: var(--md-primary-700);
+                    padding: var(--md-spacing-md);
+                    border-radius: var(--md-radius-md);
+                    margin-bottom: var(--md-spacing-lg);
+                    text-align: center;
+                    font-family: var(--md-font-mono);
+                    font-weight: 600;
+                `;
+                caseHeader.innerHTML = `
+                    <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">folder</span>
+                    Case ID: ${result.case_id}
+                    <div style="font-size: 0.8rem; font-weight: normal; margin-top: 4px; font-family: var(--md-font-family);">
+                        Analysis saved automatically - <a href="/cases" target="_blank" style="color: var(--md-primary-700); text-decoration: underline;">View in Cases</a>
+                    </div>
+                `;
+                resultsSection.insertBefore(caseHeader, resultsSection.firstChild);
+            }
+            
+            // Display predictions
+            const predictionsList = document.getElementById('predictionsList');
+            predictionsList.innerHTML = '';
+            
+            result.predictions.forEach(pred => {
+                const li = document.createElement('li');
+                li.className = 'prediction-item';
+                li.innerHTML = `
+                    <span class="prediction-name">${pred.condition}</span>
+                    <div style="display: flex; align-items: center;">
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${pred.confidence * 100}%"></div>
+                        </div>
+                        <span class="confidence-text">${(pred.confidence * 100).toFixed(1)}%</span>
+                    </div>
+                `;
+                predictionsList.appendChild(li);
+            });
+            
+            // Display visual concepts
+            const visualConceptsList = document.getElementById('visualConceptsList');
+            visualConceptsList.innerHTML = '';
+            
+            result.visual_concepts.forEach(concept => {
+                const li = document.createElement('li');
+                li.className = 'concept-item';
+                li.innerHTML = `
+                    <div class="concept-name">${concept.name}</div>
+                    <div class="concept-description">${concept.description}</div>
+                `;
+                visualConceptsList.appendChild(li);
+            });
+            
+            // Display clinical concepts
+            const clinicalConceptsList = document.getElementById('clinicalConceptsList');
+            clinicalConceptsList.innerHTML = '';
+            
+            result.clinical_concepts.forEach(concept => {
+                const li = document.createElement('li');
+                li.className = 'concept-item';
+                li.innerHTML = `
+                    <div class="concept-name">${concept.name}</div>
+                    <div class="concept-description">${concept.description}</div>
+                `;
+                clinicalConceptsList.appendChild(li);
+            });
+            
+            // Display explanation
+            document.getElementById('explanationText').textContent = result.explanations;
+            
+            // Scroll to results
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function showSnackbar(message, type = 'info') {
+            // Create snackbar
+            const snackbar = document.createElement('div');
+            snackbar.className = `md-snackbar ${type}`;
+            snackbar.textContent = message;
+            
+            // Style snackbar
+            snackbar.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'error' ? 'var(--md-error-600)' : type === 'success' ? 'var(--md-success-600)' : 'var(--md-primary-600)'};
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: slideUp 0.3s ease;
+            `;
+            
+            document.body.appendChild(snackbar);
+            
+            // Remove after 4 seconds
+            setTimeout(() => {
+                snackbar.style.animation = 'slideDown 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(snackbar);
+                }, 300);
+            }, 4000);
+        }
+        
+        function showSuccessMessage(caseId) {
+            // Show success snackbar with case info
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--md-success-600);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                z-index: 10000;
+                box-shadow: var(--md-elevation-3);
+                animation: slideUp 0.3s ease;
+                max-width: 400px;
+            `;
+            
+            successDiv.innerHTML = `
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <span class="material-icons" style="margin-right: 8px;">check_circle</span>
+                    <strong>Analysis Complete!</strong>
+                </div>
+                <div style="margin-bottom: 12px; font-size: 0.9rem;">
+                    Case ID: ${caseId}<br>
+                    Your analysis has been saved automatically.
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="window.open('/cases', '_blank')" style="
+                        background: rgba(255,255,255,0.2); 
+                        border: 1px solid rgba(255,255,255,0.3); 
+                        color: white; 
+                        padding: 6px 12px; 
+                        border-radius: 4px; 
+                        cursor: pointer;
+                        font-size: 0.8rem;
+                    ">View All Cases</button>
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        background: rgba(255,255,255,0.2); 
+                        border: 1px solid rgba(255,255,255,0.3); 
+                        color: white; 
+                        padding: 6px 12px; 
+                        border-radius: 4px; 
+                        cursor: pointer;
+                        font-size: 0.8rem;
+                    ">Close</button>
+                </div>
+            `;
+            
+            document.body.appendChild(successDiv);
+            
+            // Auto remove after 10 seconds
+            setTimeout(() => {
+                if (successDiv.parentNode) {
+                    successDiv.style.animation = 'slideDown 0.3s ease';
+                    setTimeout(() => {
+                        if (successDiv.parentNode) {
+                            successDiv.remove();
+                        }
+                    }, 300);
+                }
+            }, 10000);
+        }
+        
+        // Check authentication
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            window.location.href = '/login';
+        }
+        
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from { transform: translateX(-50%) translateY(100%); opacity: 0; }
+                to { transform: translateX(-50%) translateY(0); opacity: 1; }
+            }
+            @keyframes slideDown {
+                from { transform: translateX(-50%) translateY(0); opacity: 1; }
+                to { transform: translateX(-50%) translateY(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

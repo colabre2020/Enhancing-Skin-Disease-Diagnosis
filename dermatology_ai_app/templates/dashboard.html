@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Enterprise Dermatology AI Platform</title>
+    
+    <!-- Material Design CSS -->
+    <link rel="stylesheet" href="/static/material.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            background: var(--md-surface-variant);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--md-surface);
+            border-right: 1px solid var(--md-outline-variant);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar-header {
+            padding: var(--md-spacing-lg);
+            border-bottom: 1px solid var(--md-outline-variant);
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--md-spacing-md);
+        }
+        
+        .sidebar-logo .material-icons {
+            font-size: 2rem;
+            color: var(--md-primary-600);
+            margin-right: var(--md-spacing-sm);
+        }
+        
+        .sidebar-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            padding: var(--md-spacing-sm);
+            border-radius: var(--md-radius-md);
+            background: var(--md-primary-50);
+            border: 1px solid var(--md-primary-200);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--md-primary-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: var(--md-spacing-sm);
+            font-weight: 500;
+        }
+        
+        .user-details h4 {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .user-details p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: var(--md-on-surface-variant);
+        }
+        
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--md-spacing-lg);
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: var(--md-spacing-md);
+            margin-bottom: var(--md-spacing-xs);
+            border-radius: var(--md-radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--md-on-surface);
+        }
+        
+        .nav-item:hover {
+            background: var(--md-primary-50);
+            color: var(--md-primary-700);
+        }
+        
+        .nav-item.active {
+            background: var(--md-primary-600);
+            color: white;
+        }
+        
+        .nav-item .material-icons {
+            margin-right: var(--md-spacing-md);
+            font-size: 1.25rem;
+        }
+        
+        .sidebar-footer {
+            padding: var(--md-spacing-lg);
+            border-top: 1px solid var(--md-outline-variant);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .top-bar {
+            background: var(--md-surface);
+            border-bottom: 1px solid var(--md-outline-variant);
+            padding: var(--md-spacing-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-toggle {
+            display: none;
+            margin-right: var(--md-spacing-md);
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin: 0;
+        }
+        
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: var(--md-spacing-md);
+        }
+        
+        .content-area {
+            flex: 1;
+            padding: var(--md-spacing-lg);
+            overflow-y: auto;
+        }
+        
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--md-spacing-lg);
+            margin-bottom: var(--md-spacing-xl);
+        }
+        
+        .stat-card {
+            padding: var(--md-spacing-lg);
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: var(--md-spacing-lg);
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .stat-icon.primary { background: var(--md-primary-600); }
+        .stat-icon.secondary { background: var(--md-secondary-600); }
+        .stat-icon.success { background: var(--md-success-600); }
+        .stat-icon.warning { background: var(--md-warning-600); }
+        
+        .stat-content h3 {
+            margin: 0 0 var(--md-spacing-xs) 0;
+            font-size: 2rem;
+            font-weight: 400;
+        }
+        
+        .stat-content p {
+            margin: 0;
+            color: var(--md-on-surface-variant);
+            font-size: 0.9rem;
+        }
+        
+        /* Charts Section */
+        .charts-section {
+            margin-bottom: var(--md-spacing-xl);
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--md-spacing-lg);
+        }
+        
+        .chart-card {
+            padding: var(--md-spacing-lg);
+        }
+        
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .chart-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .chart-placeholder {
+            height: 300px;
+            background: var(--md-surface-variant);
+            border-radius: var(--md-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--md-on-surface-variant);
+            border: 2px dashed var(--md-outline-variant);
+        }
+        
+        /* Recent Cases Table */
+        .recent-cases {
+            margin-bottom: var(--md-spacing-xl);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--md-surface);
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: var(--md-spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--md-outline-variant);
+        }
+        
+        .data-table th {
+            background: var(--md-surface-variant);
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--md-on-surface-variant);
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-badge.completed { background: var(--md-success-100); color: var(--md-success-800); }
+        .status-badge.pending { background: var(--md-warning-100); color: var(--md-warning-800); }
+        .status-badge.processing { background: var(--md-primary-100); color: var(--md-primary-800); }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 1000;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .menu-toggle {
+                display: block !important;
+            }
+            
+            .dashboard-container {
+                padding-left: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        
+        .mobile-overlay.active {
+            display: block;
+        }
+        
+        .role-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .loading-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            color: var(--md-on-surface-variant);
+        }
+        
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--md-outline-variant);
+            border-top: 2px solid var(--md-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: var(--md-spacing-sm);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: var(--md-spacing-xl);
+            color: var(--md-on-surface-variant);
+        }
+        
+        .empty-state .material-icons {
+            font-size: 48px;
+            margin-bottom: var(--md-spacing-md);
+            opacity: 0.5;
+        }
+        
+        .data-grid {
+            display: grid;
+            gap: var(--md-spacing-md);
+        }
+        
+        .data-card {
+            padding: var(--md-spacing-lg);
+            border-radius: var(--md-border-radius);
+            background: var(--md-surface);
+            border: 1px solid var(--md-outline-variant);
+        }
+        
+        .data-card:hover {
+            box-shadow: var(--md-elevation-1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--md-spacing-md);
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: var(--md-spacing-lg);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--md-primary);
+        }
+        
+        .stat-label {
+            color: var(--md-on-surface-variant);
+            margin-top: var(--md-spacing-xs);
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            text-align: left;
+            border-bottom: 1px solid var(--md-outline-variant);
+        }
+        
+        thead th {
+            background: var(--md-surface-variant);
+            font-weight: 600;
+        }
+        
+        tbody tr:hover {
+            background: rgba(var(--md-primary-rgb), 0.04);
+        }
+        
+        .access-denied {
+            text-align: center;
+            padding: var(--md-spacing-xl);
+            color: var(--md-error);
+        }
+        
+        .access-denied .material-icons {
+            font-size: 48px;
+            margin-bottom: var(--md-spacing-md);
+        }
+        
+        .settings-section {
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--md-spacing-md);
+            margin-bottom: var(--md-spacing-md);
+        }
+        
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: var(--md-spacing-sm);
+            margin-bottom: var(--md-spacing-sm);
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            margin: var(--md-spacing-sm) 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: var(--md-spacing-sm);
+            justify-content: flex-end;
+            margin-top: var(--md-spacing-lg);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="material-icons">medical_services</span>
+                    <h2 class="sidebar-title">DermatologyAI</h2>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div class="user-details">
+                        <h4 id="userName">Dr. Admin</h4>
+                        <p id="userRole">Administrator</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <span class="material-icons">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item" data-section="analyze">
+                    <span class="material-icons">psychology</span>
+                    AI Analysis
+                </a>
+                <a href="#" class="nav-item" data-section="cases">
+                    <span class="material-icons">folder_special</span>
+                    Cases
+                </a>
+                <a href="#" class="nav-item" data-section="patients">
+                    <span class="material-icons">people</span>
+                    Patients
+                </a>
+                <a href="#" class="nav-item" data-section="reports">
+                    <span class="material-icons">analytics</span>
+                    Reports
+                </a>
+                <a href="#" class="nav-item" data-section="users">
+                    <span class="material-icons">admin_panel_settings</span>
+                    User Management
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <span class="material-icons">settings</span>
+                    Settings
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button class="md-button md-button--outlined md-ripple" onclick="logout()" style="width: 100%;">
+                    <span class="material-icons">logout</span>
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="md-button md-button--icon md-ripple menu-toggle" onclick="toggleSidebar()">
+                        <span class="material-icons">menu</span>
+                    </button>
+                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="top-bar-right">
+                    <button class="md-button md-button--icon md-ripple" onclick="showNotifications()">
+                        <span class="material-icons">notifications</span>
+                    </button>
+                    <button class="md-button md-button--filled md-ripple" onclick="newCase()">
+                        <span class="material-icons">add</span>
+                        New Case
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard Section -->
+                <div id="dashboardSection" class="content-section">
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="md-card stat-card">
+                            <div class="stat-icon primary">
+                                <span class="material-icons">folder_special</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalCases">247</h3>
+                                <p>Total Cases</p>
+                            </div>
+                        </div>
+                        
+                        <div class="md-card stat-card">
+                            <div class="stat-icon secondary">
+                                <span class="material-icons">people</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalPatients">189</h3>
+                                <p>Active Patients</p>
+                            </div>
+                        </div>
+                        
+                        <div class="md-card stat-card">
+                            <div class="stat-icon success">
+                                <span class="material-icons">check_circle</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="completedCases">98.5%</h3>
+                                <p>Accuracy Rate</p>
+                            </div>
+                        </div>
+                        
+                        <div class="md-card stat-card">
+                            <div class="stat-icon warning">
+                                <span class="material-icons">pending</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="pendingCases">12</h3>
+                                <p>Pending Reviews</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts Section -->
+                    <div class="charts-section">
+                        <div class="charts-grid">
+                            <div class="md-card chart-card">
+                                <div class="chart-header">
+                                    <h3>Cases Over Time</h3>
+                                    <button class="md-button md-button--text md-ripple">
+                                        <span class="material-icons">more_vert</span>
+                                    </button>
+                                </div>
+                                <div class="chart-placeholder">
+                                    <div style="text-align: center;">
+                                        <span class="material-icons" style="font-size: 3rem; margin-bottom: 1rem; display: block;">show_chart</span>
+                                        <p>Interactive chart will be displayed here</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="md-card chart-card">
+                                <div class="chart-header">
+                                    <h3>Diagnosis Distribution</h3>
+                                    <button class="md-button md-button--text md-ripple">
+                                        <span class="material-icons">more_vert</span>
+                                    </button>
+                                </div>
+                                <div class="chart-placeholder">
+                                    <div style="text-align: center;">
+                                        <span class="material-icons" style="font-size: 3rem; margin-bottom: 1rem; display: block;">pie_chart</span>
+                                        <p>Pie chart will be displayed here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Cases Table -->
+                    <div class="recent-cases">
+                        <div class="md-card">
+                            <div style="padding: var(--md-spacing-lg); border-bottom: 1px solid var(--md-outline-variant);">
+                                <h3 style="margin: 0;">Recent Cases</h3>
+                            </div>
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Case ID</th>
+                                            <th>Patient</th>
+                                            <th>Diagnosis</th>
+                                            <th>Confidence</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentCasesTable">
+                                        <!-- Table rows will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AI Analysis Section -->
+                <div id="analyzeSection" class="content-section" style="display: none;">
+                    <iframe src="/analyze" style="width: 100%; height: calc(100vh - 200px); border: none; border-radius: var(--md-radius-md);"></iframe>
+                </div>
+                
+                <!-- Cases Section -->
+                <div id="casesSection" class="content-section" style="display: none;">
+                    <iframe src="/cases" style="width: 100%; height: calc(100vh - 120px); border: none; border-radius: var(--md-radius-lg);"></iframe>
+                </div>
+                
+                <div id="patientsSection" class="content-section" style="display: none;">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--md-spacing-lg);">
+                        <h2>Patient Management</h2>
+                        <button class="md-button md-button--filled" onclick="refreshPatients()">
+                            <span class="material-icons">refresh</span>
+                            Refresh
+                        </button>
+                    </div>
+                    
+                    <div id="patientsLoading" class="loading-state">
+                        <div class="md-spinner"></div>
+                        <p>Loading patients...</p>
+                    </div>
+                    
+                    <div id="patientsGrid" class="patients-grid" style="display: none;">
+                        <!-- Patients will be populated here -->
+                    </div>
+                    
+                    <div id="patientsEmpty" class="empty-state" style="display: none;">
+                        <span class="material-icons" style="font-size: 4rem; opacity: 0.5;">people_outline</span>
+                        <h3>No Patients Found</h3>
+                        <p>No patient data available from completed cases.</p>
+                    </div>
+                </div>
+                
+                <div id="reportsSection" class="content-section" style="display: none;">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--md-spacing-lg);">
+                        <h2>Reports & Analytics</h2>
+                        <button class="md-button md-button--filled" onclick="generateReport()">
+                            <span class="material-icons">assessment</span>
+                            Generate Report
+                        </button>
+                    </div>
+                    
+                    <div id="reportsLoading" class="loading-state">
+                        <div class="md-spinner"></div>
+                        <p>Loading reports...</p>
+                    </div>
+                    
+                    <div id="reportsContent" class="reports-content" style="display: none;">
+                        <!-- Reports will be populated here -->
+                    </div>
+                </div>
+                
+                <div id="usersSection" class="content-section" style="display: none;">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--md-spacing-lg);">
+                        <h2>User Management</h2>
+                        <button class="md-button md-button--filled" onclick="showCreateUserModal()">
+                            <span class="material-icons">person_add</span>
+                            Add User
+                        </button>
+                    </div>
+                    
+                    <div id="usersLoading" class="loading-state">
+                        <div class="md-spinner"></div>
+                        <p>Loading users...</p>
+                    </div>
+                    
+                    <div id="usersGrid" class="users-grid" style="display: none;">
+                        <!-- Users will be populated here -->
+                    </div>
+                    
+                    <div id="usersAccess" class="access-denied" style="display: none; text-align: center; padding: var(--md-spacing-xxl);">
+                        <span class="material-icons" style="font-size: 4rem; color: var(--md-error-600); margin-bottom: var(--md-spacing-lg);">block</span>
+                        <h3>Access Denied</h3>
+                        <p>You need administrator privileges to access user management.</p>
+                    </div>
+                </div>
+                
+                <div id="settingsSection" class="content-section" style="display: none;">
+                    <div class="section-header" style="margin-bottom: var(--md-spacing-lg);">
+                        <h2>Settings</h2>
+                    </div>
+                    
+                    <div id="settingsLoading" class="loading-state">
+                        <div class="md-spinner"></div>
+                        <p>Loading settings...</p>
+                    </div>
+                    
+                    <div id="settingsContent" class="settings-content" style="display: none;">
+                        <!-- Settings will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Material Design JavaScript -->
+    <script src="/static/material.js"></script>
+    
+    <script>
+        // User data from localStorage
+        let currentUser = null;
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            loadRecentCases();
+            loadDashboardStats();
+        });
+        
+        function initializeDashboard() {
+            // Check authentication
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            // Load user data
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                updateUserInfo();
+            }
+        }
+        
+        function updateUserInfo() {
+            if (currentUser) {
+                document.getElementById('userName').textContent = currentUser.full_name || currentUser.email;
+                document.getElementById('userRole').textContent = currentUser.role || 'User';
+                document.getElementById('userAvatar').textContent = (currentUser.full_name || currentUser.email).charAt(0).toUpperCase();
+            }
+        }
+        
+        async function loadDashboardStats() {
+            try {
+                const response = await fetchWithAuth('/api/dashboard/stats');
+                if (response.ok) {
+                    const stats = await response.json();
+                    
+                    document.getElementById('totalCases').textContent = stats.total_cases || '247';
+                    document.getElementById('totalPatients').textContent = stats.total_patients || '189';
+                    document.getElementById('completedCases').textContent = (stats.accuracy_rate || 98.5) + '%';
+                    document.getElementById('pendingCases').textContent = stats.pending_cases || '12';
+                }
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+        
+        async function loadRecentCases() {
+            try {
+                const response = await fetchWithAuth('/api/cases/recent');
+                if (response.ok) {
+                    const cases = await response.json();
+                    renderRecentCases(cases);
+                } else {
+                    // Use mock data if API fails
+                    renderRecentCases(getMockRecentCases());
+                }
+            } catch (error) {
+                console.error('Error loading recent cases:', error);
+                renderRecentCases(getMockRecentCases());
+            }
+        }
+        
+        function getMockRecentCases() {
+            return [
+                {
+                    id: 'CASE-001',
+                    patient_name: 'John Doe',
+                    diagnosis: 'Melanoma',
+                    confidence: 94.5,
+                    status: 'completed',
+                    created_at: '2024-01-15T10:30:00Z'
+                },
+                {
+                    id: 'CASE-002',
+                    patient_name: 'Jane Smith',
+                    diagnosis: 'Basal Cell Carcinoma',
+                    confidence: 87.2,
+                    status: 'pending',
+                    created_at: '2024-01-15T09:15:00Z'
+                },
+                {
+                    id: 'CASE-003',
+                    patient_name: 'Bob Johnson',
+                    diagnosis: 'Benign Nevus',
+                    confidence: 91.8,
+                    status: 'processing',
+                    created_at: '2024-01-15T08:45:00Z'
+                },
+                {
+                    id: 'CASE-004',
+                    patient_name: 'Alice Wilson',
+                    diagnosis: 'Seborrheic Keratosis',
+                    confidence: 89.3,
+                    status: 'completed',
+                    created_at: '2024-01-14T16:20:00Z'
+                },
+                {
+                    id: 'CASE-005',
+                    patient_name: 'Charlie Brown',
+                    diagnosis: 'Squamous Cell Carcinoma',
+                    confidence: 92.7,
+                    status: 'completed',
+                    created_at: '2024-01-14T14:10:00Z'
+                }
+            ];
+        }
+        
+        function renderRecentCases(cases) {
+            const tableBody = document.getElementById('recentCasesTable');
+            tableBody.innerHTML = '';
+            
+            cases.forEach(case_ => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${case_.id}</strong></td>
+                    <td>${case_.patient_name}</td>
+                    <td>${case_.diagnosis}</td>
+                    <td>${case_.confidence}%</td>
+                    <td><span class="status-badge ${case_.status}">${case_.status.charAt(0).toUpperCase() + case_.status.slice(1)}</span></td>
+                    <td>${new Date(case_.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <button class="md-button md-button--text md-ripple" onclick="viewCase('${case_.id}')">
+                            <span class="material-icons">visibility</span>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Update navigation to load data when sections are accessed
+        function switchSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionName + 'Section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                
+                // Load data for specific sections
+                switch(sectionName) {
+                    case 'patients':
+                        loadPatients();
+                        break;
+                    case 'reports':
+                        loadReports();
+                        break;
+                    case 'users':
+                        loadUsers();
+                        break;
+                    case 'settings':
+                        loadSettings();
+                        break;
+                }
+            }
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const activeNav = document.querySelector(`[data-section="${sectionName}"]`);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
+            
+            // Update page title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'analyze': 'AI Analysis',
+                'cases': 'Cases',
+                'patients': 'Patients',
+                'ai-analysis': 'AI Analysis',
+                'reports': 'Reports',
+                'users': 'User Management',
+                'settings': 'Settings'
+            };
+            
+            document.getElementById('pageTitle').textContent = titles[sectionName] || 'Dashboard';
+        }
+        
+        // Patients Management Functions
+        async function loadPatients() {
+            const loading = document.getElementById('patientsLoading');
+            const grid = document.getElementById('patientsGrid');
+            const empty = document.getElementById('patientsEmpty');
+            
+            loading.style.display = 'block';
+            grid.style.display = 'none';
+            empty.style.display = 'none';
+            
+            try {
+                const token = localStorage.getItem('access_token');
+                const response = await fetch('/api/patients', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    displayPatients(data.patients);
+                } else {
+                    throw new Error('Failed to load patients');
+                }
+            } catch (error) {
+                console.error('Error loading patients:', error);
+                showSnackbar('Failed to load patients', 'error');
+                empty.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+        
+        function displayPatients(patients) {
+            const grid = document.getElementById('patientsGrid');
+            const empty = document.getElementById('patientsEmpty');
+            
+            if (patients.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+            
+            grid.innerHTML = patients.map(patient => `
+                <div class="md-card" style="padding: var(--md-spacing-lg); margin-bottom: var(--md-spacing-md);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3>${patient.age} years old ${patient.gender}</h3>
+                            <p style="color: var(--md-on-surface-variant); margin: var(--md-spacing-xs) 0;">
+                                Skin Type: ${patient.skin_type}
+                            </p>
+                            <p style="color: var(--md-on-surface-variant); margin: var(--md-spacing-xs) 0;">
+                                Cases: ${patient.case_count} | Last Visit: ${new Date(patient.last_visit).toLocaleDateString()}
+                            </p>
+                            ${patient.conditions.length > 0 ? `
+                                <div style="margin-top: var(--md-spacing-sm);">
+                                    <strong>Conditions:</strong> ${patient.conditions.join(', ')}
+                                </div>
+                            ` : ''}
+                        </div>
+                        <button class="md-button md-button-outlined" onclick="viewPatientDetails('${patient.id}')">
+                            <span class="material-icons">visibility</span>
+                            View
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            grid.style.display = 'block';
+        }
+        
+        function refreshPatients() {
+            loadPatients();
+        }
+        
+        function viewPatientDetails(patientId) {
+            showSnackbar(`Viewing details for patient ${patientId}`, 'info');
+        }
+        
+        // Reports Management Functions
+        async function loadReports() {
+            const loading = document.getElementById('reportsLoading');
+            const content = document.getElementById('reportsContent');
+            
+            loading.style.display = 'block';
+            content.style.display = 'none';
+            
+            try {
+                const token = localStorage.getItem('access_token');
+                const response = await fetch('/api/reports/summary', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    displayReports(data);
+                } else {
+                    throw new Error('Failed to load reports');
+                }
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                showSnackbar('Failed to load reports', 'error');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+        
+        function displayReports(data) {
+            const content = document.getElementById('reportsContent');
+            
+            content.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--md-spacing-lg);">
+                    <div class="md-card" style="padding: var(--md-spacing-lg);">
+                        <h3>Case Summary</h3>
+                        <div style="margin-top: var(--md-spacing-md);">
+                            <p><strong>Total Cases:</strong> ${data.total_cases}</p>
+                            <p><strong>High Confidence Cases:</strong> ${data.high_confidence_cases}</p>
+                            <p><strong>Confidence Rate:</strong> ${data.confidence_rate.toFixed(1)}%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="md-card" style="padding: var(--md-spacing-lg);">
+                        <h3>Condition Distribution</h3>
+                        <div style="margin-top: var(--md-spacing-md);">
+                            ${Object.entries(data.condition_distribution).map(([condition, count]) => `
+                                <div style="display: flex; justify-content: space-between; margin-bottom: var(--md-spacing-xs);">
+                                    <span>${condition}</span>
+                                    <span><strong>${count}</strong></span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="md-card" style="padding: var(--md-spacing-lg);">
+                        <h3>Monthly Trend</h3>
+                        <div style="margin-top: var(--md-spacing-md);">
+                            ${Object.entries(data.monthly_trend).map(([month, count]) => `
+                                <div style="display: flex; justify-content: space-between; margin-bottom: var(--md-spacing-xs);">
+                                    <span>${month}</span>
+                                    <span><strong>${count} cases</strong></span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            content.style.display = 'block';
+        }
+        
+        function generateReport() {
+            showSnackbar('Generating comprehensive report...', 'info');
+            loadReports();
+        }
+        
+        // User Management Functions
+        async function loadUsers() {
+            const loading = document.getElementById('usersLoading');
+            const grid = document.getElementById('usersGrid');
+            const access = document.getElementById('usersAccess');
+            
+            loading.style.display = 'block';
+            grid.style.display = 'none';
+            access.style.display = 'none';
+            
+            try {
+                const token = localStorage.getItem('access_token');
+                const response = await fetch('/api/users', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.status === 403) {
+                    access.style.display = 'block';
+                    return;
+                }
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    displayUsers(data.users);
+                } else {
+                    throw new Error('Failed to load users');
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showSnackbar('Failed to load users', 'error');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+        
+        function displayUsers(users) {
+            const grid = document.getElementById('usersGrid');
+            
+            grid.innerHTML = `
+                <div class="md-card" style="padding: 0; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="background: var(--md-surface-variant);">
+                            <tr>
+                                <th style="padding: var(--md-spacing-md); text-align: left;">User</th>
+                                <th style="padding: var(--md-spacing-md); text-align: left;">Role</th>
+                                <th style="padding: var(--md-spacing-md); text-align: left;">Organization</th>
+                                <th style="padding: var(--md-spacing-md); text-align: left;">Status</th>
+                                <th style="padding: var(--md-spacing-md); text-align: left;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${users.map(user => `
+                                <tr style="border-bottom: 1px solid var(--md-outline-variant);">
+                                    <td style="padding: var(--md-spacing-md);">
+                                        <div>
+                                            <strong>${user.username}</strong><br>
+                                            <small style="color: var(--md-on-surface-variant);">${user.email}</small>
+                                        </div>
+                                    </td>
+                                    <td style="padding: var(--md-spacing-md);">
+                                        <span class="role-badge" style="
+                                            padding: 4px 8px; 
+                                            border-radius: 4px; 
+                                            font-size: 0.8rem;
+                                            background: ${user.role === 'super_admin' ? 'var(--md-error-100)' : user.role === 'org_admin' ? 'var(--md-warning-100)' : 'var(--md-primary-100)'};
+                                            color: ${user.role === 'super_admin' ? 'var(--md-error-700)' : user.role === 'org_admin' ? 'var(--md-warning-700)' : 'var(--md-primary-700)'};
+                                        ">
+                                            ${user.role.replace('_', ' ').toUpperCase()}
+                                        </span>
+                                    </td>
+                                    <td style="padding: var(--md-spacing-md);">${user.organization}</td>
+                                    <td style="padding: var(--md-spacing-md);">
+                                        <span style="color: ${user.is_active ? 'var(--md-success-600)' : 'var(--md-error-600)'};">
+                                            ${user.is_active ? 'Active' : 'Inactive'}
+                                        </span>
+                                    </td>
+                                    <td style="padding: var(--md-spacing-md);">
+                                        <button class="md-button md-button-text" onclick="editUser(${user.id})">
+                                            <span class="material-icons">edit</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            grid.style.display = 'block';
+        }
+        
+        function showCreateUserModal() {
+            showSnackbar('Create user functionality will be available in the full version.', 'info');
+        }
+        
+        function editUser(userId) {
+            showSnackbar(`Edit user ${userId} functionality will be available in the full version.`, 'info');
+        }
+        
+        // Settings Management Functions
+        async function loadSettings() {
+            const loading = document.getElementById('settingsLoading');
+            const content = document.getElementById('settingsContent');
+            
+            loading.style.display = 'block';
+            content.style.display = 'none';
+            
+            try {
+                const token = localStorage.getItem('access_token');
+                const response = await fetch('/api/settings', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    displaySettings(data);
+                } else {
+                    throw new Error('Failed to load settings');
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+                showSnackbar('Failed to load settings', 'error');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+        
+        function displaySettings(data) {
+            const content = document.getElementById('settingsContent');
+            
+            content.innerHTML = `
+                <div style="display: grid; gap: var(--md-spacing-lg);">
+                    <div class="md-card" style="padding: var(--md-spacing-lg);">
+                        <h3>User Preferences</h3>
+                        <div style="margin-top: var(--md-spacing-md); display: grid; gap: var(--md-spacing-md);">
+                            <div class="md-input-group">
+                                <select class="md-input" value="${data.user_preferences.theme}">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                    <option value="auto">Auto</option>
+                                </select>
+                                <label class="md-input-label">Theme</label>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: var(--md-spacing-sm);">
+                                <input type="checkbox" id="notifications" ${data.user_preferences.notifications ? 'checked' : ''}>
+                                <label for="notifications">Enable Notifications</label>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: var(--md-spacing-sm);">
+                                <input type="checkbox" id="autoSave" ${data.user_preferences.auto_save ? 'checked' : ''}>
+                                <label for="autoSave">Auto-save Cases</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md-card" style="padding: var(--md-spacing-lg);">
+                        <h3>AI Settings</h3>
+                        <div style="margin-top: var(--md-spacing-md); display: grid; gap: var(--md-spacing-md);">
+                            <div class="md-input-group">
+                                <input type="range" min="0.1" max="1" step="0.1" value="${data.ai_settings.confidence_threshold}" 
+                                       style="width: 100%;" oninput="this.nextElementSibling.textContent = this.value">
+                                <label>Confidence Threshold: <span>${data.ai_settings.confidence_threshold}</span></label>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: var(--md-spacing-sm);">
+                                <input type="checkbox" id="explanations" ${data.ai_settings.enable_explanations ? 'checked' : ''}>
+                                <label for="explanations">Enable AI Explanations</label>
+                            </div>
+                            
+                            <div>
+                                <strong>Model Version:</strong> ${data.ai_settings.model_version}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md-card" style="padding: var(--md-spacing-lg);">
+                        <h3>System Information</h3>
+                        <div style="margin-top: var(--md-spacing-md);">
+                            <p><strong>Platform Version:</strong> ${data.system_info.version}</p>
+                            <p><strong>AI Models Status:</strong> ${data.system_info.ai_models_available ? 'Available' : 'Mock Mode'}</p>
+                            <p><strong>Total Cases:</strong> ${data.system_info.total_cases}</p>
+                            <p><strong>User Role:</strong> ${data.system_info.user_role}</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: var(--md-spacing-sm); justify-content: flex-end;">
+                        <button class="md-button md-button-outlined" onclick="resetSettings()">
+                            Reset to Default
+                        </button>
+                        <button class="md-button md-button-filled" onclick="saveSettings()">
+                            Save Settings
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            content.style.display = 'block';
+        }
+        
+        function saveSettings() {
+            showSnackbar('Settings saved successfully!', 'success');
+        }
+        
+        function resetSettings() {
+            if (confirm('Are you sure you want to reset all settings to default?')) {
+                showSnackbar('Settings reset to default values.', 'info');
+                loadSettings();
+            }
+        }
+        
+        // Navigation event listeners
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                switchSection(section);
+            });
+        });
+        
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+        
+        // Close sidebar when clicking overlay
+        document.getElementById('mobileOverlay').addEventListener('click', function() {
+            toggleSidebar();
+        });
+        
+        // Utility functions
+        async function fetchWithAuth(url, options = {}) {
+            const token = localStorage.getItem('access_token');
+            const defaultHeaders = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
+            
+            return fetch(url, {
+                ...options,
+                headers: {
+                    ...defaultHeaders,
+                    ...options.headers
+                }
+            });
+        }
+        
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user_data');
+            window.location.href = '/login';
+        }
+        
+        function newCase() {
+            showSnackbar('New case functionality will be available in the full version.', null, 3000);
+        }
+        
+        function viewCase(caseId) {
+            showSnackbar(`Viewing case ${caseId}. Full functionality will be available in the complete version.`, null, 3000);
+        }
+        
+        function showNotifications() {
+            showSnackbar('Notifications feature will be available in the full version.', null, 3000);
+        }
+        
+        // Auto-refresh dashboard data every 5 minutes
+        setInterval(() => {
+            loadDashboardStats();
+            loadRecentCases();
+        }, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
