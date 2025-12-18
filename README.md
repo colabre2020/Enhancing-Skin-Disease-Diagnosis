@@ -20,21 +20,21 @@ This application demonstrates the practical implementation of a multi-modal AI s
 
 ## Features
 
-### 🔬 Core AI Components
+###  Core AI Components
 
 - **Vision Encoder**: EfficientNet-B7 based feature extraction with attention mechanisms
 - **Text Encoder**: BERT-based clinical text analysis
 - **Fusion Network**: Multi-modal feature integration with learned attention weights
 - **Interpretability Engine**: GradCAM, attention visualization, and natural language explanations
 
-### 🏥 Clinical Features
+###  Clinical Features
 
 - **Multi-Disease Classification**: 7 skin disease classes including melanoma, carcinomas, and benign lesions
 - **Confidence Scoring**: Uncertainty quantification for clinical decision support
 - **Risk Assessment**: Patient demographic and clinical history integration
 - **Recommendations**: Automated follow-up and referral suggestions
 
-### 🖥️ Web Application
+###  Web Application
 
 - **Interactive Interface**: User-friendly web application for image upload and analysis
 - **Real-time Diagnosis**: Fast inference with visual explanations
@@ -49,105 +49,105 @@ This application demonstrates the practical implementation of a multi-modal AI s
                     AI Dermatological Diagnosis System
     ┌─────────────────────────────────────────────────────────────────┐
     │                         USER INTERFACE                          │
-    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
-    │  │   Web Browser   │  │   Mobile App    │  │   API Client    │ │
-    │  │   (Clinical)    │  │   (Patient)     │  │   (EMR/PACS)    │ │
-    │  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+    │  │   Web Browser   │  │   Mobile App    │  │   API Client    │  │
+    │  │   (Clinical)    │  │   (Patient)     │  │   (EMR/PACS)    │  │
+    │  └─────────────────┘  └─────────────────┘  └─────────────────┘  │
     └─────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
     ┌─────────────────────────────────────────────────────────────────┐
     │                     PRESENTATION LAYER                          │
-    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
-    │  │  FastAPI Server │  │ HTML Templates  │  │  Static Assets  │ │
-    │  │   (web_app.py)  │  │   (Jinja2)      │  │   (CSS/JS)      │ │
-    │  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+    │  │  FastAPI Server │  │ HTML Templates  │  │  Static Assets  │  │
+    │  │   (web_app.py)  │  │   (Jinja2)      │  │   (CSS/JS)      │  │
+    │  └─────────────────┘  └─────────────────┘  └─────────────────┘  │
     └─────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
     ┌─────────────────────────────────────────────────────────────────┐
     │                      INPUT PROCESSING                           │
-    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
-    │  │   Image Upload  │  │ Clinical Forms  │  │  Data Validation│ │
-    │  │   & Validation  │  │   Processing    │  │   & Cleaning    │ │
-    │  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+    │  │   Image Upload  │  │ Clinical Forms  │  │  Data Validation│  │
+    │  │   & Validation  │  │   Processing    │  │   & Cleaning    │  │
+    │  └─────────────────┘  └─────────────────┘  └─────────────────┘  │
     └─────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
     ┌─────────────────────────────────────────────────────────────────┐
     │                     CORE AI ENGINE                              │
-    │  ┌─────────────────────────────────────────────────────────────┐ │
-    │  │                  MULTI-MODAL FUSION                         │ │
-    │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │ │
-    │  │  │   Vision    │  │    Text     │  │   Attention-Based   │ │ │
-    │  │  │   Encoder   │  │   Encoder   │  │   Fusion Network    │ │ │
-    │  │  │             │  │             │  │                     │ │ │
-    │  │  │ EfficientNet│  │    BERT     │  │ Cross-Modal         │ │ │
-    │  │  │   ResNet    │  │  BioBERT    │  │ Transformer         │ │ │
-    │  │  │             │  │             │  │ Attention           │ │ │
-    │  │  └─────────────┘  └─────────────┘  └─────────────────────┘ │ │
+    │  ┌─────────────────────────────────────────────────────────────┐│
+    │  │                  MULTI-MODAL FUSION                         ││
+    │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  ││
+    │  │  │   Vision    │  │    Text     │  │   Attention-Based   │  ││
+    │  │  │   Encoder   │  │   Encoder   │  │   Fusion Network    │  ││
+    │  │  │             │  │             │  │                     │  ││
+    │  │  │ EfficientNet│  │    BERT     │  │ Cross-Modal         │  ││
+    │  │  │   ResNet    │  │  BioBERT    │  │ Transformer         │  ││
+    │  │  │             │  │             │  │ Attention           │  ││
+    │  │  └─────────────┘  └─────────────┘  └─────────────────────┘  ││
+    │  └─────────────────────────────────────────────────────────────┘│
+    │                                │                                │
+    │  ┌─────────────────────────────▼─────────────────────────────────┐ 
+    │  │               CLASSIFICATION & CONFIDENCE                     │ 
+    │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │  │
+    │  │  │ 7-Class     │  │ Confidence  │  │ Uncertainty         │ │  │
+    │  │  │ Disease     │  │ Scoring     │  │ Quantification      │ │  │
+    │  │  │ Classifier  │  │             │  │                     │ │  │
+    │  │  └─────────────┘  └─────────────┘  └─────────────────────┘ │  │
     │  └─────────────────────────────────────────────────────────────┘ │
-    │                                │                                  │
-    │  ┌─────────────────────────────▼─────────────────────────────────┐ │
-    │  │               CLASSIFICATION & CONFIDENCE                     │ │
-    │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │ │
-    │  │  │ 7-Class     │  │ Confidence  │  │ Uncertainty         │ │ │
-    │  │  │ Disease     │  │ Scoring     │  │ Quantification      │ │ │
-    │  │  │ Classifier  │  │             │  │                     │ │ │
-    │  │  └─────────────┘  └─────────────┘  └─────────────────────┘ │ │
-    │  └─────────────────────────────────────────────────────────────┘ │
-    └─────────────────────────────────────────────────────────────────┘
+    └───────────────────────────────────────────────────────────────── ┘
                                       │
                                       ▼
     ┌─────────────────────────────────────────────────────────────────┐
     │                  INTERPRETABILITY ENGINE                        │
-    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
-    │  │    GradCAM      │  │ Concept         │  │ Natural Language│ │
-    │  │ Visualization   │  │ Attribution     │  │ Explanation     │ │
-    │  │                 │  │                 │  │ Generation      │ │
-    │  │ • Heat Maps     │  │ • ABCD Features │  │ • Clinical      │ │
-    │  │ • Attention     │  │ • Risk Factors  │  │   Reasoning     │ │
+    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+    │  │    GradCAM      │  │ Concept         │  │ Natural Language│  │
+    │  │ Visualization   │  │ Attribution     │  │ Explanation     │  │
+    │  │                 │  │                 │  │ Generation      │  │
+    │  │ • Heat Maps     │  │ • ABCD Features │  │ • Clinical      │  │
+    │  │ • Attention     │  │ • Risk Factors  │  │   Reasoning     │  │
     │  │   Overlay       │  │ • SAM-based     │  │ • Recommendations│ │
-    │  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+    │  └─────────────────┘  └─────────────────┘  └─────────────────┘  │
     └─────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
     ┌─────────────────────────────────────────────────────────────────┐
     │                   CLINICAL DECISION SUPPORT                     │
-    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
-    │  │  Risk           │  │  Follow-up      │  │  Quality        │ │
-    │  │  Stratification │  │  Recommendations│  │  Assurance      │ │
-    │  │                 │  │                 │  │                 │ │
-    │  │ • High/Med/Low  │  │ • Urgent        │  │ • Confidence    │ │
-    │  │ • Age factors   │  │ • Routine       │  │   Thresholds    │ │
-    │  │ • Location risk │  │ • Monitoring    │  │ • Audit Trail   │ │
-    │  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+    │  │  Risk           │  │  Follow-up      │  │  Quality        │  │
+    │  │  Stratification │  │  Recommendations│  │  Assurance      │  │
+    │  │                 │  │                 │  │                 │  │
+    │  │ • High/Med/Low  │  │ • Urgent        │  │ • Confidence    │  │
+    │  │ • Age factors   │  │ • Routine       │  │   Thresholds    │  │
+    │  │ • Location risk │  │ • Monitoring    │  │ • Audit Trail   │  │
+    │  └─────────────────┘  └─────────────────┘  └─────────────────┘  │
     └─────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
     ┌─────────────────────────────────────────────────────────────────┐
     │                      OUTPUT GENERATION                          │
-    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
-    │  │  Diagnostic     │  │  Visual         │  │  Clinical       │ │
-    │  │  Report         │  │  Explanations   │  │  Integration    │ │
-    │  │                 │  │                 │  │                 │ │
-    │  │ • Predictions   │  │ • Attention     │  │ • HL7 FHIR      │ │
-    │  │ • Confidence    │  │   Maps          │  │ • DICOM         │ │
-    │  │ • Explanations  │  │ • Overlays      │  │ • EMR Export    │ │
-    │  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+    │  │  Diagnostic     │  │  Visual         │  │  Clinical       │  │
+    │  │  Report         │  │  Explanations   │  │  Integration    │  │
+    │  │                 │  │                 │  │                 │  │
+    │  │ • Predictions   │  │ • Attention     │  │ • HL7 FHIR      │  │
+    │  │ • Confidence    │  │   Maps          │  │ • DICOM         │  │
+    │  │ • Explanations  │  │ • Overlays      │  │ • EMR Export    │  │
+    │  └─────────────────┘  └─────────────────┘  └─────────────────┘  │
     └─────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
     ┌─────────────────────────────────────────────────────────────────┐
     │                    DEPLOYMENT & MONITORING                      │
-    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
-    │  │    Docker       │  │   Performance   │  │    Security     │ │
-    │  │ Containerization│  │   Monitoring    │  │   & Privacy     │ │
-    │  │                 │  │                 │  │                 │ │
-    │  │ • Scalable      │  │ • Metrics       │  │ • HIPAA         │ │
-    │  │ • Portable      │  │ • Logging       │  │ • Encryption    │ │
-    │  │ • Cloud Ready   │  │ • Alerts        │  │ • Access Control│ │
-    │  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+    │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+    │  │    Docker       │  │   Performance   │  │    Security     │  │
+    │  │ Containerization│  │   Monitoring    │  │   & Privacy     │  │
+    │  │                 │  │                 │  │                 │  │
+    │  │ • Scalable      │  │ • Metrics       │  │ • HIPAA         │  │
+    │  │ • Portable      │  │ • Logging       │  │ • Encryption    │  │
+    │  │ • Cloud Ready   │  │ • Alerts        │  │ • Access Control│  │
+    │  └─────────────────┘  └─────────────────┘  └─────────────────┘  │
     └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -160,16 +160,16 @@ This application demonstrates the practical implementation of a multi-modal AI s
     ┌─────────────────────────────────────────────────────────────┐
     │                  INPUT MODALITIES                           │
     │                                                             │
-    │  📸 Image Input           📝 Clinical Data                  │
-    │  ┌─────────────────┐     ┌─────────────────────────────┐   │
-    │  │ • Dermoscopy    │     │ • Patient Demographics     │   │
-    │  │ • Photography   │     │   - Age, Gender, Skin Type │   │
-    │  │ • Mobile Camera │     │ • Clinical History          │   │
-    │  │ • DICOM Images  │     │   - Symptoms, Duration     │   │
-    │  │                 │     │ • Lesion Characteristics   │   │
-    │  │ Resolution:     │     │   - Location, Size, Changes│   │
-    │  │ 224x224 - 1024x │     │ • Family History           │   │
-    │  └─────────────────┘     └─────────────────────────────┘   │
+    │   Image Input                 Clinical Data                 │
+    │  ┌─────────────────┐     ┌─────────────────────────────┐    │
+    │  │ • Dermoscopy    │     │ • Patient Demographics      │    │
+    │  │ • Photography   │     │   - Age, Gender, Skin Type  │    │
+    │  │ • Mobile Camera │     │ • Clinical History          │    │
+    │  │ • DICOM Images  │     │   - Symptoms, Duration      │    │
+    │  │                 │     │ • Lesion Characteristics    │    │
+    │  │ Resolution:     │     │   - Location, Size, Changes │    │
+    │  │ 224x224 - 1024x │     │ • Family History            │    │
+    │  └─────────────────┘     └─────────────────────────────┘    │
     └─────────────────────────────────────────────────────────────┘
                         │                     │
                         └──────────┬──────────┘
@@ -177,84 +177,84 @@ This application demonstrates the practical implementation of a multi-modal AI s
     ┌─────────────────────────────────────────────────────────────┐
     │              PREPROCESSING PIPELINE                         │
     │                                                             │
-    │  🔧 Image Processing        📄 Text Processing              │
-    │  ┌─────────────────┐       ┌─────────────────────────────┐ │
-    │  │ • Normalization │       │ • Tokenization              │ │
-    │  │ • Resizing      │       │ • Clinical NLP              │ │
-    │  │ • Augmentation  │       │ • Feature Extraction       │ │
-    │  │ • Quality Check │       │ • Standardization          │ │
-    │  └─────────────────┘       └─────────────────────────────┘ │
+    │   Image Processing              Text Processing             │
+    │  ┌─────────────────┐       ┌─────────────────────────────┐  │
+    │  │ • Normalization │       │ • Tokenization              │  │
+    │  │ • Resizing      │       │ • Clinical NLP              │  │
+    │  │ • Augmentation  │       │ • Feature Extraction        │  │
+    │  │ • Quality Check │       │ • Standardization           │  │
+    │  └─────────────────┘       └─────────────────────────────┘  │
     └─────────────────────────────────────────────────────────────┘
                                    │
                                    ▼
     ┌─────────────────────────────────────────────────────────────┐
     │                MULTI-MODAL AI ENGINE                        │
     │                                                             │
-    │  🔬 Vision Encoder           🧠 Text Encoder                │
-    │  ┌─────────────────┐        ┌──────────────────────────┐   │
-    │  │ EfficientNet-B7 │───────▶│ BERT / BioBERT           │   │
-    │  │ or ResNet-50    │        │                          │   │
-    │  │                 │        │ • Clinical Vocabulary    │   │
-    │  │ • Feature Maps  │        │ • Context Understanding  │   │
-    │  │   [B,256,14,14] │        │ • Medical Terminology   │   │
-    │  │ • Attention     │        │                          │   │
-    │  │   Weights       │        │ Output: [B, 256]         │   │
-    │  │ • Spatial Info  │        │                          │   │
-    │  │                 │        │                          │   │
-    │  │ Output: [B,256] │        │                          │   │
-    │  └─────────────────┘        └──────────────────────────┘   │
-    │            │                            │                  │
-    │            └────────────┬───────────────┘                  │
-    │                         ▼                                  │
-    │  🔗 Fusion Network                                         │
-    │  ┌─────────────────────────────────────────────────────┐   │
-    │  │ Cross-Modal Attention Transformer                   │   │
-    │  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────────┐ │   │
-    │  │ │Multi-Head   │ │   Feature   │ │ Classification  │ │   │
-    │  │ │Attention    │▶│ Integration │▶│    Head         │ │   │
-    │  │ │Q,K,V        │ │             │ │                 │ │   │
-    │  │ └─────────────┘ └─────────────┘ └─────────────────┘ │   │
-    │  │                                                     │   │
-    │  │ Output: [7 disease probabilities] + [confidence]    │   │
-    │  └─────────────────────────────────────────────────────┘   │
+    │      Vision Encoder              Text Encoder               │
+    │  ┌─────────────────┐        ┌──────────────────────────┐    │
+    │  │ EfficientNet-B7 │───────▶│ BERT / BioBERT           │    │
+    │  │ or ResNet-50    │        │                          │    │
+    │  │                 │        │ • Clinical Vocabulary    │    │
+    │  │ • Feature Maps  │        │ • Context Understanding  │    │
+    │  │   [B,256,14,14] │        │ • Medical Terminology    │    │
+    │  │ • Attention     │        │                          │    │
+    │  │   Weights       │        │ Output: [B, 256]         │    │
+    │  │ • Spatial Info  │        │                          │    │
+    │  │                 │        │                          │    │
+    │  │ Output: [B,256] │        │                          │    │
+    │  └─────────────────┘        └──────────────────────────┘    │
+    │            │                            │                   │
+    │            └────────────┬───────────────┘                   │
+    │                         ▼                                   │
+    │     Fusion Network                                          │
+    │  ┌─────────────────────────────────────────────────────┐    │
+    │  │ Cross-Modal Attention Transformer                   │    │
+    │  │ ┌─────────────┐ ┌─────────────┐ ┌─────────────────┐ │    │
+    │  │ │Multi-Head   │ │   Feature   │ │ Classification  │ │    │
+    │  │ │Attention    │▶│ Integration │▶│    Head         │ │    │
+    │  │ │Q,K,V        │ │             │ │                 │ │    │
+    │  │ └─────────────┘ └─────────────┘ └─────────────────┘ │    │
+    │  │                                                     │    │
+    │  │ Output: [7 disease probabilities] + [confidence]    │    │
+    │  └─────────────────────────────────────────────────────┘    │
     └─────────────────────────────────────────────────────────────┘
                                    │
                                    ▼
     ┌─────────────────────────────────────────────────────────────┐
     │              INTERPRETABILITY LAYER                         │
     │                                                             │
-    │  👁️ Visual Explanation      🧠 Concept Attribution         │
-    │  ┌─────────────────┐       ┌─────────────────────────────┐ │
-    │  │ GradCAM         │       │ ABCD Feature Analysis       │ │
-    │  │ • Heat Maps     │       │ • Asymmetry Detection       │ │
-    │  │ • Attention     │       │ • Border Irregularity       │ │
-    │  │   Overlay       │       │ • Color Variation           │ │
-    │  │ • Region Focus  │       │ • Diameter Assessment       │ │
-    │  │                 │       │ • Evolution Tracking        │ │
-    │  │ LIME/SHAP       │       │                             │ │
-    │  │ • Feature       │       │ Risk Factor Analysis:       │ │
-    │  │   Importance    │       │ • Age, Location, Skin Type  │ │
-    │  └─────────────────┘       └─────────────────────────────┘ │
-    │                                       │                    │
-    │  💬 Natural Language Generation        │                    │
-    │  ┌───────────────────────────────────────────────────────┐ │
-    │  │ Clinical Explanation Engine                           │ │
-    │  │ • Diagnostic Reasoning                                │ │
-    │  │ • Risk Assessment                                     │ │
-    │  │ • Treatment Recommendations                           │ │
-    │  │ • Follow-up Guidelines                                │ │
-    │  └───────────────────────────────────────────────────────┘ │
+    │    Visual Explanation           Concept Attribution         │
+    │  ┌─────────────────┐       ┌─────────────────────────────┐  │
+    │  │ GradCAM         │       │ ABCD Feature Analysis       │  │
+    │  │ • Heat Maps     │       │ • Asymmetry Detection       │  │
+    │  │ • Attention     │       │ • Border Irregularity       │  │
+    │  │   Overlay       │       │ • Color Variation           │  │
+    │  │ • Region Focus  │       │ • Diameter Assessment       │  │
+    │  │                 │       │ • Evolution Tracking        │  │
+    │  │ LIME/SHAP       │       │                             │  │
+    │  │ • Feature       │       │ Risk Factor Analysis:       │  │
+    │  │   Importance    │       │ • Age, Location, Skin Type  │  │
+    │  └─────────────────┘       └─────────────────────────────┘  │
+    │                                         │                   │
+    │      Natural Language Generation        │                   │
+    │  ┌───────────────────────────────────────────────────────┐  │
+    │  │ Clinical Explanation Engine                           │  │
+    │  │ • Diagnostic Reasoning                                │  │
+    │  │ • Risk Assessment                                     │  │
+    │  │ • Treatment Recommendations                           │  │
+    │  │ • Follow-up Guidelines                                │  │
+    │  └───────────────────────────────────────────────────────┘  │
     └─────────────────────────────────────────────────────────────┘
                                    │
                                    ▼
     ┌─────────────────────────────────────────────────────────────┐
     │                OUTPUT & INTEGRATION                         │
     │                                                             │
-    │  📊 Diagnostic Report        🔌 Clinical Integration        │
+    │     Diagnostic Report           Clinical Integration        │
     │  ┌─────────────────┐        ┌─────────────────────────────┐ │
     │  │ Disease Classes │        │ EMR/EHR Integration         │ │
-    │  │ 1. Melanoma     │        │ • HL7 FHIR Format          │ │
-    │  │ 2. BCC          │        │ • DICOM Compatibility      │ │
+    │  │ 1. Melanoma     │        │ • HL7 FHIR Format           │ │
+    │  │ 2. BCC          │        │ • DICOM Compatibility       │ │
     │  │ 3. SCC          │        │ • API Endpoints             │ │
     │  │ 4. AK           │        │                             │ │
     │  │ 5. Nevus        │        │ Audit & Compliance          │ │
@@ -270,7 +270,7 @@ This application demonstrates the practical implementation of a multi-modal AI s
 ### Data Flow Architecture
 
 ```
-    👩‍⚕️ Clinician Interface                    🔬 AI Processing Pipeline
+      Clinician Interface                     AI Processing Pipeline
     ┌─────────────────┐                      ┌─────────────────┐
     │ Upload Image    │─────────────────────▶│ Image           │
     │ + Clinical Data │                      │ Preprocessing   │
@@ -282,9 +282,9 @@ This application demonstrates the practical implementation of a multi-modal AI s
               │                              │ Feature         │
               │                              │ Extraction      │
               │                              └─────────────────┘
-              │                                        │
-              ▼                                        │
-    ┌─────────────────┐                                │
+              │                                         │
+              ▼                                         │
+    ┌─────────────────┐                                 │
     │ Clinical Text   │─────────────────────────────────┼──┐
     │ Processing      │                                 │  │
     └─────────────────┘                                 │  │
@@ -311,12 +311,12 @@ This application demonstrates the practical implementation of a multi-modal AI s
                                              └─────────────────┘
                                                        │
                                                        ▼
-    📋 Clinical Report                       ┌─────────────────┐
+       Clinical Report                       ┌─────────────────┐
     ┌─────────────────┐◀─────────────────────│ Report          │
     │ • Diagnosis     │                      │ Generation      │
     │ • Confidence    │                      │                 │
     │ • Explanations  │                      │                 │
-    │ • Recommendations│                      │                 │
+    │ • Recommendations│                     │                 │
     │ • Visual Maps   │                      │                 │
     └─────────────────┘                      └─────────────────┘
 ```
@@ -502,22 +502,22 @@ Based on the research paper targets:
 
 This implementation validates the research paper claims:
 
-### ✅ **Technical Innovation**
+###  **Technical Innovation**
 - Multi-modal AI architecture combining vision and text
 - Attention mechanisms for feature selection
 - Interpretable explanations with concept attribution
 
-### ✅ **Clinical Utility** 
+###  **Clinical Utility** 
 - Real-time diagnosis with confidence scoring
 - Integration-ready web interface
 - Comprehensive reporting for clinical decisions
 
-### ✅ **Accessibility Enhancement**
+###  **Accessibility Enhancement**
 - Web-based deployment for broad access
 - No specialized hardware requirements
 - Batch processing for research applications
 
-### ✅ **Trust and Transparency**
+###  **Trust and Transparency**
 - Visual attention maps and explanations
 - Confidence quantification
 - Natural language diagnostic reasoning
@@ -525,28 +525,28 @@ This implementation validates the research paper claims:
 ## Development Roadmap
 
 ### Phase 1: Foundation (Complete)
-- ✅ Core AI engine implementation
-- ✅ Web application interface
-- ✅ Basic interpretability features
-- ✅ Demo dataset generation
+-  Core AI engine implementation
+-  Web application interface
+-  Basic interpretability features
+-  Demo dataset generation
 
 ### Phase 2: Enhancement (In Progress)
-- 🔄 Advanced interpretability methods
-- 🔄 Comprehensive evaluation metrics
-- 🔄 Performance optimization
-- 🔄 Extended documentation
+-  Advanced interpretability methods
+-  Comprehensive evaluation metrics
+-  Performance optimization
+-  Extended documentation
 
 ### Phase 3: Clinical Validation (Planned)
-- 📋 Real dataset integration
-- 📋 Clinical trial simulation
-- 📋 Regulatory compliance features
-- 📋 Production deployment tools
+-  Real dataset integration
+-  Clinical trial simulation
+-  Regulatory compliance features
+-  Production deployment tools
 
 ### Phase 4: Production (Future)
-- 📋 Scalable cloud deployment
-- 📋 EMR system integration
-- 📋 Continuous learning pipeline
-- 📋 Multi-language support
+-  Scalable cloud deployment
+-  EMR system integration
+-  Continuous learning pipeline
+-  Multi-language support
 
 ## Contributing
 
@@ -585,7 +585,7 @@ If you use this implementation in your research, please cite:
 
 ## Disclaimer
 
-⚠️ **Important Medical Disclaimer**: This system is for research and educational purposes only. It should not be used for actual medical diagnosis or treatment decisions. Always consult qualified healthcare professionals for medical concerns.
+ **Important Medical Disclaimer**: This system is for research and educational purposes only. It should not be used for actual medical diagnosis or treatment decisions. Always consult qualified healthcare professionals for medical concerns.
 
 ## Support
 
@@ -604,6 +604,5 @@ For questions, issues, or contributions:
 
 ---
 
-**Built with ❤️ for advancing healthcare through AI**
-# Enhancing-Skin-Disease-Diagnosis
+**Built with for advancing healthcare through AI**
 # Enhancing-Skin-Disease-Diagnosis
