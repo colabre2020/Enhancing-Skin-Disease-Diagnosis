@@ -34,6 +34,15 @@ except ImportError as e:
     print(f"Warning: Could not import core modules: {e}")
     print("Running in demo mode with limited functionality")
 
+try:
+    from .lightweight_inference import LightweightDermEngine
+except ImportError:
+    try:
+        from lightweight_inference import LightweightDermEngine
+    except ImportError as e:
+        print(f"Warning: Could not import lightweight inference module: {e}")
+        LightweightDermEngine = None
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -48,10 +57,11 @@ app = FastAPI(
 # Global model instance (in production, this would be loaded from a saved checkpoint)
 model = None
 interpretability_engine = None
+lightweight_engine = None
 
 def initialize_models():
     """Initialize the AI models"""
-    global model, interpretability_engine
+    global model, interpretability_engine, lightweight_engine
     try:
         logger.info("Initializing AI models...")
         model = create_demo_model()
@@ -60,9 +70,17 @@ def initialize_models():
         logger.info("Models initialized successfully")
     except Exception as e:
         logger.error(f"Failed to initialize models: {e}")
-        # Create dummy objects for demo
+        # Create fallback objects for serverless/demo usage
         model = None
         interpretability_engine = None
+
+    if model is None and LightweightDermEngine is not None:
+        try:
+            lightweight_engine = LightweightDermEngine()
+            logger.info("Lightweight inference engine initialized")
+        except Exception as e:
+            logger.error(f"Failed to initialize lightweight inference engine: {e}")
+            lightweight_engine = None
 
 # Initialize models on startup
 initialize_models()
@@ -127,6 +145,19 @@ async def analyze_skin_lesion(
         # Combine clinical information
         full_clinical_history = f"{clinical_history}. Symptoms: {symptoms}"
         
+        if model is None and lightweight_engine is not None:
+            lightweight_result = lightweight_engine.diagnose(
+                image,
+                full_clinical_history,
+                patient_metadata
+            )
+            return create_lightweight_response(
+                image,
+                full_clinical_history,
+                patient_metadata,
+                lightweight_result
+            )
+
         if model is None:
             # Return demo response if model not available
             return create_demo_response(image, full_clinical_history, patient_metadata)
@@ -274,19 +305,56 @@ This is a demonstration of the AI diagnostic system. The results shown are for i
     })
 
 
+def create_lightweight_response(
+    image: Image.Image,
+    clinical_history: str,
+    patient_metadata: Dict,
+    lightweight_result
+) -> JSONResponse:
+    """Create a deterministic lightweight response for serverless environments."""
+    buffered = io.BytesIO()
+    image.save(buffered, format="PNG")
+    image_base64 = base64.b64encode(buffered.getvalue()).decode()
+
+    return JSONResponse(content={
+        "success": True,
+        "lightweight_mode": True,
+        "image_data": f"data:image/png;base64,{image_base64}",
+        "predictions": lightweight_result.predictions,
+        "confidence": lightweight_result.confidence_scores,
+        "explanation": lightweight_result.explanation,
+        "visual_concepts": lightweight_result.visual_concepts,
+        "clinical_concepts": lightweight_result.clinical_concepts,
+        "patient_info": patient_metadata,
+        "clinical_history": clinical_history
+    })
+
+
 @app.get("/api/health")
 async def health_check():
     """Health check endpoint"""
+    mode = "full" if model is not None else ("lightweight" if lightweight_engine is not None else "demo")
     return {
         "status": "healthy",
+        "inference_mode": mode,
         "model_loaded": model is not None,
-        "interpretability_available": interpretability_engine is not None
+        "interpretability_available": interpretability_engine is not None,
+        "lightweight_available": lightweight_engine is not None
     }
 
 
 @app.get("/api/model_info")
 async def model_info():
     """Get information about the loaded model"""
+    if model is None and lightweight_engine is not None:
+        return {
+            "model_type": "LightweightDermEngine",
+            "num_classes": len(lightweight_engine.disease_classes),
+            "disease_classes": lightweight_engine.disease_classes,
+            "version": "1.0.0-lightweight",
+            "note": "Serverless heuristic mode for Vercel"
+        }
+
     if model is None:
         return {"error": "Model not loaded", "demo_mode": True}
     
@@ -326,6 +394,15 @@ async def batch_analyze(files: List[UploadFile] = File(...)):
                 result = model.diagnose(image, "Batch processing", default_metadata)
                 results.append({
                     "filename": file.filename,
+                    "predictions": result.predictions,
+                    "confidence": result.confidence_scores,
+                    "top_prediction": max(result.predictions.keys(), key=lambda k: result.predictions[k])
+                })
+            elif lightweight_engine:
+                result = lightweight_engine.diagnose(image, "Batch processing", default_metadata)
+                results.append({
+                    "filename": file.filename,
+                    "lightweight_mode": True,
                     "predictions": result.predictions,
                     "confidence": result.confidence_scores,
                     "top_prediction": max(result.predictions.keys(), key=lambda k: result.predictions[k])
@@ -795,8 +872,13 @@ def create_templates():
         f.write(about_html)
 
 
-# Create templates on startup
-create_templates()
+# Create templates on startup only when explicitly enabled
+# This avoids write attempts in read-only serverless environments.
+if os.getenv("GENERATE_DEMO_TEMPLATES", "0") == "1":
+    try:
+        create_templates()
+    except OSError as e:
+        logger.warning(f"Template generation skipped: {e}")
 
 
 if __name__ == "__main__":
