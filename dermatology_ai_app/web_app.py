@@ -11,7 +11,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, JSONResponse
-import uvicorn
 import os
 import sys
 from pathlib import Path
@@ -882,6 +881,8 @@ if os.getenv("GENERATE_DEMO_TEMPLATES", "0") == "1":
 
 
 if __name__ == "__main__":
+    import uvicorn
+
     print("Starting AI Dermatological Diagnosis System...")
     print("Access the application at: http://localhost:8000")
     print("API documentation at: http://localhost:8000/docs")
